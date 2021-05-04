@@ -3,17 +3,20 @@ package controlador;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import comunicacion.EmisorDni;
 import vista.Vista_registro;
 
 public class ControladorRegistro implements ActionListener
 {
 	Vista_registro ventana;
+	EmisorDni comunicador;
 
 	public ControladorRegistro()
 	{
 		super();
 		this.ventana = new Vista_registro();
 		this.ventana.setActionListener(this);
+		this.comunicador = EmisorDni.getInstance();
 	}
 
 	@Override
@@ -75,7 +78,7 @@ public class ControladorRegistro implements ActionListener
 			this.ventana.imprimeMensaje("Debe Ingresar un DNI");
 		} else
 		{
-			// llamada a clase cliente y envio de dni
+			this.comunicador.enviarCliente(dni);
 			this.ventana.vaciarNumDni();
 			this.ventana.imprimeMensaje("Turno solicitado correctamente, espere a ser llamado por el televisor");
 		}
