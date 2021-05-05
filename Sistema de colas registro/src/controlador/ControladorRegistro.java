@@ -78,9 +78,15 @@ public class ControladorRegistro implements ActionListener
 			this.ventana.imprimeMensaje("Debe Ingresar un DNI");
 		} else
 		{
-			this.comunicador.enviarCliente(dni);
+			boolean check = this.comunicador.enviarCliente(dni);
 			this.ventana.vaciarNumDni();
-			this.ventana.imprimeMensaje("Turno solicitado correctamente, espere a ser llamado por el televisor");
+			if (check)
+			{
+				this.ventana.imprimeMensaje("Turno solicitado correctamente, espere a ser llamado por el televisor");
+			} else
+			{
+				this.ventana.imprimeMensaje("No se pudo asignar el turno, intente nuevamente");
+			}
 		}
 
 	}
