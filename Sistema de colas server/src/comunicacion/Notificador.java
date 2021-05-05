@@ -29,6 +29,38 @@ public class Notificador
 	}
 
 	/**
+	 * @return the port
+	 */
+	public int getPort()
+	{
+		return port;
+	}
+
+	/**
+	 * @return the host
+	 */
+	public String getHost()
+	{
+		return host;
+	}
+
+	/**
+	 * @param host the host to set
+	 */
+	public void setHost(String host)
+	{
+		this.host = host;
+	}
+
+	/**
+	 * @param port the port to set
+	 */
+	public void setPort(int port)
+	{
+		this.port = port;
+	}
+
+	/**
 	 * @param dni dni de la persona a llamar
 	 * @param box numero de box del empleado que llama a la persona
 	 * @return true si pudo realizar la accion con exito, false de lo contrario

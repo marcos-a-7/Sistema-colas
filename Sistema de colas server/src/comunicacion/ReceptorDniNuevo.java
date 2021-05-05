@@ -8,7 +8,7 @@ import java.net.Socket;
 
 import modelo.AsignadorTurnos;
 
-public class ReceptorDniNuevo
+public class ReceptorDniNuevo implements Runnable
 {
 	private static ReceptorDniNuevo instance = null;
 	private AsignadorTurnos asignadorTurnos = null;
@@ -19,7 +19,22 @@ public class ReceptorDniNuevo
 		super();
 		this.port = 9000;// leer de archivo cfg
 		this.asignadorTurnos = AsignadorTurnos.getInstance();
-		recibirDni();
+	}
+
+	/**
+	 * @return the port
+	 */
+	public int getPort()
+	{
+		return port;
+	}
+
+	/**
+	 * @param port the port to set
+	 */
+	public void setPort(int port)
+	{
+		this.port = port;
 	}
 
 	public static ReceptorDniNuevo getInstance()
@@ -48,7 +63,9 @@ public class ReceptorDniNuevo
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
 
-				boolean check = asignadorTurnos.asignarTurno(in.readUTF());
+				String dni = in.readUTF();
+
+				boolean check = asignadorTurnos.asignarTurno(dni);
 
 				out.writeBoolean(check);
 				socket.close();
@@ -69,6 +86,13 @@ public class ReceptorDniNuevo
 				}
 			}
 		}
+	}
+
+	@Override
+	public void run()
+	{
+		recibirDni();
+
 	}
 
 }

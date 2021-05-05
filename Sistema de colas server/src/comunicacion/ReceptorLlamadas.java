@@ -8,7 +8,7 @@ import java.net.Socket;
 
 import modelo.AsignadorTurnos;
 
-public class ReceptorLlamadas
+public class ReceptorLlamadas implements Runnable
 {
 	private static ReceptorLlamadas instance;
 	private AsignadorTurnos asignadorTurnos;
@@ -19,7 +19,7 @@ public class ReceptorLlamadas
 		super();
 		this.port = 10000;// obtener de un txt cfg
 		this.asignadorTurnos = AsignadorTurnos.getInstance();
-		recibirLlamado();
+
 	}
 
 	public static ReceptorLlamadas getInstance()
@@ -29,6 +29,22 @@ public class ReceptorLlamadas
 			instance = new ReceptorLlamadas();
 		}
 		return instance;
+	}
+
+	/**
+	 * @return the port
+	 */
+	public int getPort()
+	{
+		return port;
+	}
+
+	/**
+	 * @param port the port to set
+	 */
+	public void setPort(int port)
+	{
+		this.port = port;
 	}
 
 	private void recibirLlamado()
@@ -70,5 +86,12 @@ public class ReceptorLlamadas
 				}
 			}
 		}
+	}
+
+	@Override
+	public void run()
+	{
+		recibirLlamado();
+
 	}
 }
