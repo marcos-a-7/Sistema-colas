@@ -68,6 +68,8 @@ public class ReceptorLlamadas implements Runnable
 				String dniSig = this.asignadorTurnos.llamarSiguiente(box);// envio el box para llamar al siguiente
 
 				out.writeUTF(dniSig);// devuelvo el dni del siguiente al sistema de empleado
+				out.write(this.asignadorTurnos.getCantCola());
+				
 				socket.close();
 			}
 		} catch (IOException e)
