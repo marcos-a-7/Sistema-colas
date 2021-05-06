@@ -6,6 +6,11 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
@@ -15,6 +20,8 @@ import java.awt.Color;
 import java.awt.SystemColor;
 import java.awt.Window;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.LineBorder;
@@ -349,6 +356,8 @@ public class Interfaz_monitor extends JFrame
 
 		this.lblBoxTurno1.setText("BOX " + box);
 		this.lblDniTurno1.setText(dni);
+		reproducirSonido("src/turnoNuevo.wav");
+		
 	}
 
 	public void vaciarTurnos()
@@ -372,5 +381,16 @@ public class Interfaz_monitor extends JFrame
 		this.lblDniTurno8.setText("");
 
 	}
+	
+    public void reproducirSonido(String nombreSonido){
+        try {
+         AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(nombreSonido).getAbsoluteFile());
+         Clip clip = AudioSystem.getClip();
+         clip.open(audioInputStream);
+         clip.start();
+        } catch(UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+          System.out.println("Error al reproducir el sonido.");
+        }
+      }
 
 }
