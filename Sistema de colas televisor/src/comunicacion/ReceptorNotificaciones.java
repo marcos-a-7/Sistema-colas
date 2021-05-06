@@ -1,24 +1,31 @@
 package comunicacion;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 import vista.Interfaz_monitor;
 
-public class receptorNotificaciones implements Runnable
+public class ReceptorNotificaciones implements Runnable
 {
-	private static receptorNotificaciones instance = null;
+	private static ReceptorNotificaciones instance = null;
 	private Interfaz_monitor ventana;
 	private int port;
 
-	private receptorNotificaciones()
+	private ReceptorNotificaciones()
 	{
 		super();
-		this.port = 9000;// leer de archivo cfg
+		leerConfig();
 		this.ventana = new Interfaz_monitor();
+		this.ventana.vaciarTurnos();
+		this.recibirNotificacion();
 	}
 
 	/**
@@ -37,13 +44,34 @@ public class receptorNotificaciones implements Runnable
 		this.port = port;
 	}
 
-	public static receptorNotificaciones getInstance()
+	public static ReceptorNotificaciones getInstance()
 	{
 		if (instance == null)
 		{
-			instance = new receptorNotificaciones();
+			instance = new ReceptorNotificaciones();
 		}
 		return instance;
+	}
+
+	private void leerConfig()
+	{
+		BufferedReader reader = null;
+		try
+		{
+			reader = new BufferedReader(new InputStreamReader(new FileInputStream("config.cfg"), "UTF-8"));
+			this.port = Integer.parseInt(reader.readLine().replaceAll("portTele ", ""));
+			reader.close();
+
+		} catch (UnsupportedEncodingException | FileNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	private void recibirNotificacion()

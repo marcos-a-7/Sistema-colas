@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import comunicacion.Notificador;
 import comunicacion.ReceptorDniNuevo;
@@ -28,6 +30,16 @@ public class ControladorServer implements ActionListener
 		super();
 		this.ventanaCfg = new Interfaz_Servidor();
 		this.ventanaCfg.setActionListener(this);
+		String localIpAddress;
+		try
+		{
+			localIpAddress = InetAddress.getLocalHost().getHostAddress();
+			this.ventanaCfg.setLbl_IP(localIpAddress);
+		} catch (UnknownHostException e)
+		{
+			e.printStackTrace();
+		}
+		
 	}
 
 	@Override
@@ -63,10 +75,10 @@ public class ControladorServer implements ActionListener
 		try
 		{
 			reader = new BufferedReader(new InputStreamReader(new FileInputStream("config.cfg"), "UTF-8"));
-			String ipTele = reader.readLine();
-			int puertoTele = Integer.parseInt(reader.readLine());
-			int puertoBox = Integer.parseInt(reader.readLine());
-			int puertoCliente = Integer.parseInt(reader.readLine());
+			String ipTele = reader.readLine().replaceAll("ipTele ", "");
+			int puertoTele = Integer.parseInt(reader.readLine().replaceAll("portTele ", ""));
+			int puertoBox = Integer.parseInt(reader.readLine().replaceAll("portEmpleado ", ""));
+			int puertoCliente = Integer.parseInt(reader.readLine().replaceAll("portCliente ", ""));
 			reader.close();
 
 			Notificador.getInstance().setPort(puertoTele);
@@ -105,10 +117,10 @@ public class ControladorServer implements ActionListener
 		try
 		{
 			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("config.cfg"), "UTF-8"));
-			writer.write(ventanaCfg.getTextField_IPTele() + "\n");
-			writer.write(Integer.toString(ventanaCfg.getTextField_PuertoTele()) + "\n");
-			writer.write(Integer.toString(ventanaCfg.getTextField_PuertoBox()) + "\n");
-			writer.write(Integer.toString(ventanaCfg.getTextField_PuertoCliente()));
+			writer.write("ipTele " + ventanaCfg.getTextField_IPTele() + "\n");
+			writer.write("portTele " + Integer.toString(ventanaCfg.getTextField_PuertoTele()) + "\n");
+			writer.write("portEmpleado " + Integer.toString(ventanaCfg.getTextField_PuertoBox()) + "\n");
+			writer.write("portCliente " + Integer.toString(ventanaCfg.getTextField_PuertoCliente()));
 
 			writer.close();
 			this.ventanaCfg.imprimeMensaje("La configuracion se guardo correctamente");

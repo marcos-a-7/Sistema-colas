@@ -1,8 +1,13 @@
 package comunicacion;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 
 public class EmisorDni
@@ -14,8 +19,30 @@ public class EmisorDni
 	private EmisorDni()
 	{
 		super();
-		this.port = 9000; // leer amos de archivo cfg
-		this.host = "127.0.0.1";
+		leerConfig();
+	}
+
+	private void leerConfig()
+	{
+		BufferedReader reader = null;
+		try
+		{
+			reader = new BufferedReader(new InputStreamReader(new FileInputStream("config.cfg"), "UTF-8"));
+			this.host = reader.readLine().replaceAll("ipServer ", "");
+			System.out.println(host);
+			this.port = Integer.parseInt(reader.readLine().replaceAll("portCliente ", ""));
+			reader.close();
+
+		} catch (UnsupportedEncodingException | FileNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	public static EmisorDni getInstance()

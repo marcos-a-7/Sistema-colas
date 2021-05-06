@@ -18,6 +18,7 @@ public class ControladorEmpleado implements ActionListener
 		super();
 		this.box = box;
 		this.ventana = new Interfaz_Empleado(box);
+		this.ventana.setActionListener(this);
 		llamador = EmisorLLamados.getInstance();
 	}
 
@@ -38,7 +39,7 @@ public class ControladorEmpleado implements ActionListener
 
 		if (mensaje.getDni().isEmpty())
 		{
-			this.ventana.imprimeMensaje("No hay personas en la cola de esper, llame nuevamente mas tarde");
+			this.ventana.imprimeMensaje("No hay personas en la cola de espera, llame nuevamente mas tarde");
 		} else
 		{
 			this.ventana.setDni(mensaje.getDni());

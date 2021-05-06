@@ -1,5 +1,6 @@
 package modelo;
 
+import java.util.LinkedList;
 import java.util.Queue;
 
 import comunicacion.Notificador;
@@ -7,7 +8,9 @@ import comunicacion.Notificador;
 public class AsignadorTurnos
 {
 	private static AsignadorTurnos instance = null;
-	Queue<String> cola;
+	Queue<String> cola = new LinkedList<String>();
+	{
+	};
 	Notificador notificador;
 
 	private AsignadorTurnos()
@@ -46,8 +49,12 @@ public class AsignadorTurnos
 	 */
 	public String llamarSiguiente(int box)
 	{
-		String dniSig = cola.poll();
-		notificador.notificar(dniSig, box);
+		String dniSig = "";
+		if (!this.cola.isEmpty())
+		{
+			dniSig = cola.poll();
+			notificador.notificar(dniSig, box);
+		}
 		return dniSig;
 	}
 }

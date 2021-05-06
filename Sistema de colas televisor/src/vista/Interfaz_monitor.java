@@ -320,8 +320,7 @@ public class Interfaz_monitor extends JFrame
 								.addComponent(this.lblDniTurno8))
 						.addContainerGap(16, Short.MAX_VALUE)));
 		this.panel_10.setLayout(gl_panel_10);
-		JOptionPane.showConfirmDialog(null, "¿Todos los datos ingresados son correctos?", "Confirmar turno",
-				JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+		
 		this.frame.setVisible(true);
 	}
 

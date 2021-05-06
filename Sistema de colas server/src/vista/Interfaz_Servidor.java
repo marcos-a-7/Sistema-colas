@@ -148,9 +148,9 @@ public class Interfaz_Servidor extends JFrame
 		this.frame.setVisible(true);
 	}
 
-	public void setLbl_IP(int IP)
+	public void setLbl_IP(String IP)
 	{
-		this.lbl_IP.setText(Integer.toString(IP));
+		this.lbl_IP.setText(IP);
 	}
 
 	public int getTextField_PuertoCliente()
