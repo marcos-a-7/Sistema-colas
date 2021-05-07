@@ -29,7 +29,6 @@ public class EmisorDni
 		{
 			reader = new BufferedReader(new InputStreamReader(new FileInputStream("config.cfg"), "UTF-8"));
 			this.host = reader.readLine().replaceAll("ipServer ", "");
-			System.out.println(host);
 			this.port = Integer.parseInt(reader.readLine().replaceAll("portCliente ", ""));
 			reader.close();
 
