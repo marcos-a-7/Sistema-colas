@@ -33,7 +33,7 @@ public class Interfaz_monitor extends JFrame
 	private JFrame frame;
 	private JPanel contentPane;
 	private JPanel panel;
-	private JLabel lblNewLabel;
+	private JLabel lblNuevoTurno;
 	private JLabel lblDniTurno1;
 	private JPanel panel_1;
 	private JPanel panel_2;
@@ -85,9 +85,9 @@ public class Interfaz_monitor extends JFrame
 		this.panel_1.setBackground(new Color(72, 61, 139));
 		this.panel.add(this.panel_1);
 
-		this.lblNewLabel = new JLabel("Nuevo Turno");
-		this.lblNewLabel.setForeground(new Color(255, 255, 255));
-		this.lblNewLabel.setFont(new Font("Arial Black", Font.PLAIN, 60));
+		this.lblNuevoTurno = new JLabel("Nuevo Turno");
+		this.lblNuevoTurno.setForeground(new Color(255, 255, 255));
+		this.lblNuevoTurno.setFont(new Font("Arial Black", Font.PLAIN, 60));
 
 		this.lblDniTurno1 = new JLabel("123456587");
 		this.lblDniTurno1.setForeground(new Color(255, 255, 255));
@@ -98,18 +98,17 @@ public class Interfaz_monitor extends JFrame
 		this.lblBoxTurno1.setFont(new Font("Arial Black", Font.PLAIN, 80));
 		GroupLayout gl_panel_1 = new GroupLayout(this.panel_1);
 		gl_panel_1.setHorizontalGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_1.createSequentialGroup()
-						.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_panel_1.createSequentialGroup().addGap(49).addComponent(this.lblNewLabel))
-								.addGroup(gl_panel_1.createSequentialGroup().addGap(77)
-										.addGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING)
-												.addComponent(this.lblBoxTurno1, GroupLayout.PREFERRED_SIZE, 360,
-														GroupLayout.PREFERRED_SIZE)
-												.addComponent(this.lblDniTurno1))))
+				.addGroup(gl_panel_1.createSequentialGroup().addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_1.createSequentialGroup().addGap(49).addComponent(this.lblNuevoTurno))
+						.addGroup(gl_panel_1.createSequentialGroup().addGap(77)
+								.addGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING)
+										.addComponent(this.lblBoxTurno1, GroupLayout.PREFERRED_SIZE, 360,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(this.lblDniTurno1))))
 						.addContainerGap(33, Short.MAX_VALUE)));
 		gl_panel_1
 				.setVerticalGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel_1.createSequentialGroup().addGap(49).addComponent(this.lblNewLabel)
+						.addGroup(gl_panel_1.createSequentialGroup().addGap(49).addComponent(this.lblNuevoTurno)
 								.addGap(151).addComponent(this.lblDniTurno1).addGap(128).addComponent(this.lblBoxTurno1,
 										GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
 								.addContainerGap(136, Short.MAX_VALUE)));
@@ -327,7 +326,7 @@ public class Interfaz_monitor extends JFrame
 								.addComponent(this.lblDniTurno8))
 						.addContainerGap(16, Short.MAX_VALUE)));
 		this.panel_10.setLayout(gl_panel_10);
-		
+
 		this.frame.setVisible(true);
 	}
 
@@ -356,8 +355,9 @@ public class Interfaz_monitor extends JFrame
 
 		this.lblBoxTurno1.setText("BOX " + box);
 		this.lblDniTurno1.setText(dni);
-		reproducirSonido("src/turnoNuevo.wav");
-		
+		reproducirSonido("turnoNuevo.wav");
+		parpadeo();
+
 	}
 
 	public void vaciarTurnos()
@@ -381,16 +381,47 @@ public class Interfaz_monitor extends JFrame
 		this.lblDniTurno8.setText("");
 
 	}
-	
-    public void reproducirSonido(String nombreSonido){
-        try {
-         AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(nombreSonido).getAbsoluteFile());
-         Clip clip = AudioSystem.getClip();
-         clip.open(audioInputStream);
-         clip.start();
-        } catch(UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
-          System.out.println("Error al reproducir el sonido.");
-        }
-      }
 
+	private void reproducirSonido(String nombreSonido)
+	{
+		try
+		{
+			AudioInputStream audioInputStream = AudioSystem
+					.getAudioInputStream(new File(nombreSonido).getAbsoluteFile());
+			Clip clip = AudioSystem.getClip();
+			clip.open(audioInputStream);
+			clip.start();
+		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex)
+		{
+			System.out.println("Error al reproducir el sonido.");
+		}
+	}
+
+	private void parpadeo()
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			try
+			{
+				this.panel_1.setBackground(new Color(255, 255, 255));
+				this.lblNuevoTurno.setForeground(new Color(0, 0, 0));
+				this.lblDniTurno1.setForeground(new Color(0, 0, 0));
+				this.lblBoxTurno1.setForeground(new Color(0, 0, 0));
+
+				Thread.sleep(300);
+
+				this.panel_1.setBackground(new Color(72, 61, 139));
+				this.lblNuevoTurno.setForeground(new Color(255, 255, 255));
+				this.lblDniTurno1.setForeground(new Color(255, 255, 255));
+				this.lblBoxTurno1.setForeground(new Color(255, 255, 255));
+
+				Thread.sleep(300);
+
+			} catch (InterruptedException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 }
