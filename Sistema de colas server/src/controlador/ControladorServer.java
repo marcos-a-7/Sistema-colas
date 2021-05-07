@@ -34,12 +34,12 @@ public class ControladorServer implements ActionListener
 		try
 		{
 			localIpAddress = InetAddress.getLocalHost().getHostAddress();
-			this.ventanaCfg.setLbl_IP(localIpAddress);
+			this.ventanaCfg.setLbl_IP("IP: " + localIpAddress);
 		} catch (UnknownHostException e)
 		{
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	@Override
@@ -49,9 +49,6 @@ public class ControladorServer implements ActionListener
 
 		switch (comando)
 		{
-		case "GUARDAR":
-			guardarConfig();
-			break;
 		case "EJECUTAR":
 			ejecutar();
 			break;
@@ -100,31 +97,6 @@ public class ControladorServer implements ActionListener
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (FileNotFoundException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
-	private void guardarConfig()
-	{
-		BufferedWriter writer = null;
-		try
-		{
-			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("config.cfg"), "UTF-8"));
-			writer.write("ipTele " + ventanaCfg.getTextField_IPTele() + "\n");
-			writer.write("portTele " + Integer.toString(ventanaCfg.getTextField_PuertoTele()) + "\n");
-			writer.write("portEmpleado " + Integer.toString(ventanaCfg.getTextField_PuertoBox()) + "\n");
-			writer.write("portCliente " + Integer.toString(ventanaCfg.getTextField_PuertoCliente()));
-
-			writer.close();
-			this.ventanaCfg.imprimeMensaje("La configuracion se guardo correctamente");
-		} catch (UnsupportedEncodingException | FileNotFoundException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
