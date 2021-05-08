@@ -83,6 +83,7 @@ public class Vista_registro extends JFrame
 		this.panel_1.setLayout(new BoxLayout(this.panel_1, BoxLayout.X_AXIS));
 
 		this.textField_dni = new JTextField();
+		this.textField_dni.setEditable(false);
 		this.textField_dni.setHorizontalAlignment(SwingConstants.RIGHT);
 		this.textField_dni.setBackground(Color.WHITE);
 		this.textField_dni.setFont(new Font("Arial Black", Font.PLAIN, 80));

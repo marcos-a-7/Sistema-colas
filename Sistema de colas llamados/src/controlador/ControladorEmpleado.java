@@ -40,6 +40,7 @@ public class ControladorEmpleado implements ActionListener
 		if (mensaje.getDni().isEmpty())
 		{
 			this.ventana.imprimeMensaje("No hay personas en la cola de espera, llame nuevamente mas tarde");
+			this.ventana.setCantidadClientes(mensaje.getCantCola());
 		} else
 		{
 			this.ventana.setDni(mensaje.getDni());
