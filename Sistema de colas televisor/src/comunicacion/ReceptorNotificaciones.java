@@ -1,7 +1,6 @@
 package comunicacion;
 
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -76,7 +75,6 @@ public class ReceptorNotificaciones implements Runnable
 		ServerSocket server = null;
 		Socket socket = null;
 		DataInputStream in;
-		DataOutputStream out;
 
 		try
 		{
@@ -86,14 +84,12 @@ public class ReceptorNotificaciones implements Runnable
 				socket = server.accept();
 
 				in = new DataInputStream(socket.getInputStream());
-				out = new DataOutputStream(socket.getOutputStream());
 
 				String dni = in.readUTF();
 				int box = in.read();
 
 				this.ventana.actualizaTurnos(dni, box);
 
-				out.writeBoolean(true);
 				socket.close();
 			}
 		} catch (IOException e)

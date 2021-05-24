@@ -17,6 +17,7 @@ import java.util.Properties;
 import comunicacion.Notificador;
 import comunicacion.ReceptorDniNuevo;
 import comunicacion.ReceptorLlamadas;
+import comunicacion.Resincronizador;
 import vista.Interfaz_Servidor;
 import vista.Interfaz_ServidorCorriendo;
 
@@ -84,6 +85,11 @@ public class ControladorServer implements ActionListener
 
 			Thread receptorLlamadas = new Thread(ReceptorLlamadas.getInstance());
 			Thread receptorDni = new Thread(ReceptorDniNuevo.getInstance());
+			Thread resincronizador = new Thread(Resincronizador.getInstance());
+
+			Resincronizador.getInstance().sincronizar();
+
+			resincronizador.start();
 			receptorLlamadas.start();
 			receptorDni.start();
 

@@ -1,6 +1,5 @@
 package comunicacion;
 
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -15,8 +14,8 @@ import java.util.Properties;
 public class EmisorLLamados
 {
 	private static EmisorLLamados instance = null;
-	private int port;
-	private String host;
+	private int[] port = new int[2];
+	private String[] host = new String[2];
 
 	private EmisorLLamados()
 	{
@@ -30,16 +29,16 @@ public class EmisorLLamados
 		try
 		{
 			properties.load(new FileInputStream(new File("config.cfg")));
-			this.host = properties.getProperty("ipServer", "127.0.0.1");
-			this.port = Integer.parseInt(properties.getProperty("portEmpleado", "9000"));
+			this.host[0] = properties.getProperty("ipServer", "127.0.0.1");
+			this.port[0] = Integer.parseInt(properties.getProperty("portEmpleado", "9000"));
+			this.host[1] = properties.getProperty("ipServer2", "127.0.0.1");
+			this.port[1] = Integer.parseInt(properties.getProperty("portEmpleado2", "9000"));
 
 		} catch (UnsupportedEncodingException | FileNotFoundException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -54,59 +53,45 @@ public class EmisorLLamados
 		return instance;
 	}
 
-	/**
-	 * @return the port
-	 */
-	public int getPort()
-	{
-		return port;
-	}
-
-	/**
-	 * @param port the port to set
-	 */
-	public void setPort(int port)
-	{
-		this.port = port;
-	}
-
-	/**
-	 * @return the host
-	 */
-	public String getHost()
-	{
-		return host;
-	}
-
-	/**
-	 * @param host the host to set
-	 */
-	public void setHost(String host)
-	{
-		this.host = host;
-	}
-
 	public Mensaje enviarLlamado(int box) throws IOException
 	{
+		Mensaje[] mensaje = new Mensaje[2];
 		Mensaje salida = null;
-
 		Socket socket;
 		DataInputStream in;
 		DataOutputStream out;
 
-		socket = new Socket(host, port);
+		for (int i = 0; i < 2; i++)
+		{
+			try
+			{
+				socket = new Socket(host[i], port[i]);
 
-		in = new DataInputStream(socket.getInputStream());
-		out = new DataOutputStream(socket.getOutputStream());
+				in = new DataInputStream(socket.getInputStream());
+				out = new DataOutputStream(socket.getOutputStream());
 
-		out.write(box);
+				out.write(box);
 
-		String dni = in.readUTF();
-		int cantCola = in.read();
+				String dni = in.readUTF();
+				int cantCola = in.read();
 
-		salida = new Mensaje(dni, cantCola);
-		socket.close();
+				mensaje[i] = new Mensaje(dni, cantCola);
+				socket.close();
+			} catch (IOException e)
+			{
+				// e.printStackTrace();
+			}
+		}
+		int j = 0;
+		do
+		{
+			salida = mensaje[j++];
+		} while (salida == null && j < 2);
 
+		if (salida == null)
+		{
+			throw new IOException("Imposible conectar con el servidor, intente nuevamente mas tarde");
+		}
 		return salida;
 	}
 }

@@ -17,7 +17,6 @@ public class ReceptorLlamadas implements Runnable
 	private ReceptorLlamadas()
 	{
 		super();
-		this.port = 10000;// obtener de un txt cfg
 		this.asignadorTurnos = AsignadorTurnos.getInstance();
 
 	}

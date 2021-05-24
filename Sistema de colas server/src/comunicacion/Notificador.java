@@ -1,6 +1,5 @@
 package comunicacion;
 
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
@@ -65,25 +64,20 @@ public class Notificador
 	 * @param box numero de box del empleado que llama a la persona
 	 * @return true si pudo realizar la accion con exito, false de lo contrario
 	 */
-	public boolean notificar(String dni, int box)
+	public void notificar(String dni, int box)
 	{
-		boolean salida = false;
 
 		Socket socket;
-		DataInputStream in;
 		DataOutputStream out;
 
 		try
 		{
 			socket = new Socket(host, port);
 
-			in = new DataInputStream(socket.getInputStream());
 			out = new DataOutputStream(socket.getOutputStream());
 
 			out.writeUTF(dni);
 			out.write(box);
-
-			salida = in.readBoolean();
 
 			socket.close();
 
@@ -91,7 +85,6 @@ public class Notificador
 		{
 			e.printStackTrace();
 		}
-		return salida;
 	}
 
 }

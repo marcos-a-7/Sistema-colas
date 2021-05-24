@@ -17,7 +17,6 @@ public class ReceptorDniNuevo implements Runnable
 	private ReceptorDniNuevo()
 	{
 		super();
-		this.port = 9000;// leer de archivo cfg
 		this.asignadorTurnos = AsignadorTurnos.getInstance();
 	}
 
