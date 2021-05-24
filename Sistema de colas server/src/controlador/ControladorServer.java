@@ -2,17 +2,17 @@ package controlador;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Properties;
 
 import comunicacion.Notificador;
 import comunicacion.ReceptorDniNuevo;
@@ -68,15 +68,14 @@ public class ControladorServer implements ActionListener
 
 	private void ejecutar()
 	{
-		BufferedReader reader = null;
+		Properties properties = new Properties();
 		try
 		{
-			reader = new BufferedReader(new InputStreamReader(new FileInputStream("config.cfg"), "UTF-8"));
-			String ipTele = reader.readLine().replaceAll("ipTele ", "");
-			int puertoTele = Integer.parseInt(reader.readLine().replaceAll("portTele ", ""));
-			int puertoBox = Integer.parseInt(reader.readLine().replaceAll("portEmpleado ", ""));
-			int puertoCliente = Integer.parseInt(reader.readLine().replaceAll("portCliente ", ""));
-			reader.close();
+			properties.load(new FileInputStream(new File("config.cfg")));
+			String ipTele = properties.getProperty("ipTele", "127.0.0.1");
+			int puertoTele = Integer.parseInt(properties.getProperty("portTele", "8000"));
+			int puertoBox = Integer.parseInt(properties.getProperty("portEmpleado", "9000"));
+			int puertoCliente = Integer.parseInt(properties.getProperty("portCliente", "10000"));
 
 			Notificador.getInstance().setPort(puertoTele);
 			Notificador.getInstance().setHost(ipTele);
@@ -94,15 +93,12 @@ public class ControladorServer implements ActionListener
 
 		} catch (UnsupportedEncodingException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (FileNotFoundException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

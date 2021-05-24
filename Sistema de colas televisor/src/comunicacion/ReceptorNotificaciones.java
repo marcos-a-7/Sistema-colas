@@ -1,15 +1,15 @@
 package comunicacion;
 
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Properties;
 
 import vista.Interfaz_monitor;
 
@@ -55,20 +55,17 @@ public class ReceptorNotificaciones implements Runnable
 
 	private void leerConfig()
 	{
-		BufferedReader reader = null;
+		Properties properties = new Properties();
 		try
 		{
-			reader = new BufferedReader(new InputStreamReader(new FileInputStream("config.cfg"), "UTF-8"));
-			this.port = Integer.parseInt(reader.readLine().replaceAll("portTele ", ""));
-			reader.close();
+			properties.load(new FileInputStream(new File("config.cfg")));
+			this.port = Integer.parseInt(properties.getProperty("portTele", "8000"));
 
 		} catch (UnsupportedEncodingException | FileNotFoundException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

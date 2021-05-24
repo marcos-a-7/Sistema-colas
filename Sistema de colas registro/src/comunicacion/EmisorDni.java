@@ -1,14 +1,15 @@
 package comunicacion;
 
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
+
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.util.Properties;
 
 public class EmisorDni
 {
@@ -24,21 +25,18 @@ public class EmisorDni
 
 	private void leerConfig()
 	{
-		BufferedReader reader = null;
+		Properties properties = new Properties();
 		try
 		{
-			reader = new BufferedReader(new InputStreamReader(new FileInputStream("config.cfg"), "UTF-8"));
-			this.host = reader.readLine().replaceAll("ipServer ", "");
-			this.port = Integer.parseInt(reader.readLine().replaceAll("portCliente ", ""));
-			reader.close();
+			properties.load(new FileInputStream(new File("config.cfg")));
+			this.host = properties.getProperty("ipServer", "127.0.0.1");
+			this.port = Integer.parseInt(properties.getProperty("portCliente", "10000"));
 
 		} catch (UnsupportedEncodingException | FileNotFoundException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -108,7 +106,7 @@ public class EmisorDni
 
 		} catch (IOException e)
 		{
-			e.printStackTrace();
+			e.printStackTrace();// conexion al servidor secundario
 		}
 		return salida;
 	}

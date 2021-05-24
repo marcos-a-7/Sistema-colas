@@ -1,11 +1,12 @@
 package main;
 
-import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
+
 import java.io.UnsupportedEncodingException;
+import java.util.Properties;
 
 import controlador.ControladorEmpleado;
 
@@ -14,13 +15,12 @@ public class Main
 
 	public static void main(String[] args)
 	{
+		Properties properties = new Properties();
 		int box;
-		BufferedReader reader = null;
 		try
 		{
-			reader = new BufferedReader(new InputStreamReader(new FileInputStream("config.cfg"), "UTF-8"));
-			box = Integer.parseInt(reader.readLine().replaceAll("box ", ""));
-			reader.close();
+			properties.load(new FileInputStream(new File("config.cfg")));
+			box = Integer.parseInt(properties.getProperty("box"));
 
 			new ControladorEmpleado(box);
 		} catch (UnsupportedEncodingException | FileNotFoundException e)

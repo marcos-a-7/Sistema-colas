@@ -1,14 +1,16 @@
 package comunicacion;
 
-import java.io.BufferedReader;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
+
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.util.Properties;
 
 public class EmisorLLamados
 {
@@ -24,14 +26,12 @@ public class EmisorLLamados
 
 	private void leerConfig()
 	{
-		BufferedReader reader = null;
+		Properties properties = new Properties();
 		try
 		{
-			reader = new BufferedReader(new InputStreamReader(new FileInputStream("config.cfg"), "UTF-8"));
-			reader.readLine();
-			this.host = reader.readLine().replaceAll("ipServer ", "");
-			this.port = Integer.parseInt(reader.readLine().replaceAll("portEmpleado ", ""));
-			reader.close();
+			properties.load(new FileInputStream(new File("config.cfg")));
+			this.host = properties.getProperty("ipServer", "127.0.0.1");
+			this.port = Integer.parseInt(properties.getProperty("portEmpleado", "9000"));
 
 		} catch (UnsupportedEncodingException | FileNotFoundException e)
 		{
@@ -86,7 +86,7 @@ public class EmisorLLamados
 		this.host = host;
 	}
 
-	public Mensaje enviarLlamado(int box)
+	public Mensaje enviarLlamado(int box) throws IOException
 	{
 		Mensaje salida = null;
 
@@ -94,25 +94,19 @@ public class EmisorLLamados
 		DataInputStream in;
 		DataOutputStream out;
 
-		try
-		{
-			socket = new Socket(host, port);
+		socket = new Socket(host, port);
 
-			in = new DataInputStream(socket.getInputStream());
-			out = new DataOutputStream(socket.getOutputStream());
+		in = new DataInputStream(socket.getInputStream());
+		out = new DataOutputStream(socket.getOutputStream());
 
-			out.write(box);
+		out.write(box);
 
-			String dni = in.readUTF();
-			int cantCola = in.read();
+		String dni = in.readUTF();
+		int cantCola = in.read();
 
-			salida = new Mensaje(dni, cantCola);
-			socket.close();
+		salida = new Mensaje(dni, cantCola);
+		socket.close();
 
-		} catch (IOException e)
-		{
-			e.printStackTrace();
-		}
 		return salida;
 	}
 }

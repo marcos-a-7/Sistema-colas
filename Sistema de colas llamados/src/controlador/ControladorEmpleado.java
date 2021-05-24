@@ -2,6 +2,7 @@ package controlador;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import comunicacion.EmisorLLamados;
 import comunicacion.Mensaje;
@@ -35,17 +36,24 @@ public class ControladorEmpleado implements ActionListener
 
 	private void llamarNuevo()
 	{
-		Mensaje mensaje = llamador.enviarLlamado(this.box);
-
-		if (mensaje.getDni().isEmpty())
+		Mensaje mensaje;
+		try
 		{
-			this.ventana.imprimeMensaje("No hay personas en la cola de espera, llame nuevamente mas tarde");
-			this.ventana.setCantidadClientes(mensaje.getCantCola());
-		} else
+			mensaje = llamador.enviarLlamado(this.box);
+			if (mensaje.getDni().isEmpty())
+			{
+				this.ventana.imprimeMensaje("No hay personas en la cola de espera, llame nuevamente mas tarde");
+				this.ventana.setCantidadClientes(mensaje.getCantCola());
+			} else
+			{
+				this.ventana.setDni(mensaje.getDni());
+				this.ventana.setCantidadClientes(mensaje.getCantCola());
+			}
+		} catch (IOException e)
 		{
-			this.ventana.setDni(mensaje.getDni());
-			this.ventana.setCantidadClientes(mensaje.getCantCola());
+			this.ventana.imprimeMensaje("Servidor no disponible intente nuevamente mas tarde");
 		}
+
 	}
 
 }
