@@ -53,37 +53,51 @@ public class EmisorDni
 		return instance;
 	}
 
-	public boolean enviarCliente(String dni)
+	private void switchServer()
 	{
-		boolean[] salida = new boolean[2];
-		salida[0] = false;
-		salida[1] = false;
+		String hostAux = this.host[0];
+		int portAux = this.port[0];
+		this.port[0] = this.port[1];
+		this.host[0] = this.host[1];
+		this.port[1] = portAux;
+		this.host[1] = hostAux;
+	}
 
+	private boolean enviar(String dni) throws IOException
+	{
+		boolean salida = false;
 		Socket socket;
 		DataInputStream in;
 		DataOutputStream out;
 
-		for (int i = 0; i < 2; i++)
+		socket = new Socket(host[0], port[0]);
+
+		in = new DataInputStream(socket.getInputStream());
+		out = new DataOutputStream(socket.getOutputStream());
+
+		out.writeBoolean(false);
+		out.writeUTF(dni);
+
+		salida = in.readBoolean();
+
+		socket.close();
+		return salida;
+	}
+
+	public boolean enviarCliente(String dni) throws IOException
+	{
+		boolean salida = false;
+		try
 		{
-			try
-			{
-				socket = new Socket(host[i], port[i]);
+			salida = enviar(dni);
 
-				in = new DataInputStream(socket.getInputStream());
-				out = new DataOutputStream(socket.getOutputStream());
-
-				out.writeUTF(dni);
-
-				salida[i] = in.readBoolean();
-
-				socket.close();
-
-			} catch (IOException e)
-			{
-				//e.printStackTrace();
-			}
+		} catch (IOException e)
+		{
+			switchServer();
+			salida = enviar(dni);
 		}
-		return salida[0] || salida[1];
+
+		return salida;
 	}
 
 }

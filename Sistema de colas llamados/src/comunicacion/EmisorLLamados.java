@@ -53,45 +53,52 @@ public class EmisorLLamados
 		return instance;
 	}
 
-	public Mensaje enviarLlamado(int box) throws IOException
+	private void switchServer()
 	{
-		Mensaje[] mensaje = new Mensaje[2];
-		Mensaje salida = null;
+		String hostAux = this.host[0];
+		int portAux = this.port[0];
+		this.port[0] = this.port[1];
+		this.host[0] = this.host[1];
+		this.port[1] = portAux;
+		this.host[1] = hostAux;
+	}
+
+	private Mensaje llamar(int box) throws IOException
+	{
 		Socket socket;
 		DataInputStream in;
 		DataOutputStream out;
 
-		for (int i = 0; i < 2; i++)
+		socket = new Socket(host[0], port[0]);
+
+		in = new DataInputStream(socket.getInputStream());
+		out = new DataOutputStream(socket.getOutputStream());
+
+		out.writeBoolean(false);
+		out.write(box);
+
+		String dni = in.readUTF();
+		int cantCola = in.read();
+
+		socket.close();
+
+		return new Mensaje(dni, cantCola);
+
+	}
+
+	public Mensaje enviarLlamado(int box) throws IOException
+	{
+		Mensaje salida = null;
+
+		try
 		{
-			try
-			{
-				socket = new Socket(host[i], port[i]);
-
-				in = new DataInputStream(socket.getInputStream());
-				out = new DataOutputStream(socket.getOutputStream());
-
-				out.write(box);
-
-				String dni = in.readUTF();
-				int cantCola = in.read();
-
-				mensaje[i] = new Mensaje(dni, cantCola);
-				socket.close();
-			} catch (IOException e)
-			{
-				// e.printStackTrace();
-			}
+			salida = llamar(box);
+		} catch (IOException e)
+		{
+			switchServer();
+			salida = llamar(box);
 		}
-		int j = 0;
-		do
-		{
-			salida = mensaje[j++];
-		} while (salida == null && j < 2);
 
-		if (salida == null)
-		{
-			throw new IOException("Imposible conectar con el servidor, intente nuevamente mas tarde");
-		}
 		return salida;
 	}
 }

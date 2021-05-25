@@ -72,7 +72,7 @@ public class ControladorServer implements ActionListener
 		Properties properties = new Properties();
 		try
 		{
-			properties.load(new FileInputStream(new File("config.cfg")));
+			properties.load(new FileInputStream(new File("config2.cfg")));
 			String ipTele = properties.getProperty("ipTele", "127.0.0.1");
 			int puertoTele = Integer.parseInt(properties.getProperty("portTele", "8000"));
 			int puertoBox = Integer.parseInt(properties.getProperty("portEmpleado", "9000"));

@@ -51,7 +51,7 @@ public class ReceptorDniNuevo implements Runnable
 		Socket socket = null;
 		DataInputStream in;
 		DataOutputStream out;
-
+		boolean isServer;
 		try
 		{
 			server = new ServerSocket(port);
@@ -61,13 +61,20 @@ public class ReceptorDniNuevo implements Runnable
 
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
+				isServer = in.readBoolean();
 
 				String dni = in.readUTF();
-
 				boolean check = asignadorTurnos.asignarTurno(dni);
 
-				out.writeBoolean(check);
-				socket.close();
+				if (!isServer)
+				{
+					out.writeBoolean(check);
+					socket.close();
+					Resincronizador.getInstance().actualizarRegistro(dni);
+				} else
+				{
+					socket.close();
+				}
 			}
 		} catch (IOException e)
 		{

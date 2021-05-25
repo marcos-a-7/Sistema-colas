@@ -52,6 +52,7 @@ public class ReceptorLlamadas implements Runnable
 		Socket socket = null;
 		DataInputStream in;
 		DataOutputStream out;
+		boolean isServer;
 
 		try
 		{
@@ -62,14 +63,22 @@ public class ReceptorLlamadas implements Runnable
 
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
+				isServer = in.readBoolean();
 
-				int box = in.read();
-				String dniSig = this.asignadorTurnos.llamarSiguiente(box);// envio el box para llamar al siguiente
-
-				out.writeUTF(dniSig);// devuelvo el dni del siguiente al sistema de empleado
-				out.write(this.asignadorTurnos.getCantCola());
-				
-				socket.close();
+				if (!isServer)// la conexion no proviene de un servidor
+				{
+					int box = in.read();
+					String dniSig = this.asignadorTurnos.llamarSiguiente(box);// traigo el siguiente del asignador de
+																				// turnos
+					out.writeUTF(dniSig);// devuelvo el dni del siguiente al sistema de empleado
+					out.write(this.asignadorTurnos.getCantCola());
+					socket.close();
+					Resincronizador.getInstance().actualizarLlamado(box);
+				} else // la conexion proviene de un servidor
+				{
+					this.asignadorTurnos.eliminarSiguiente();
+					socket.close();
+				}
 			}
 		} catch (IOException e)
 		{

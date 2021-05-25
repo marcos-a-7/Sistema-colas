@@ -19,7 +19,7 @@ public class Resincronizador implements Runnable
 	private static Resincronizador instance = null;
 	private AsignadorTurnos asignadorTurnos = AsignadorTurnos.getInstance();
 	private String ipServer2;
-	private int port, portServer2;
+	private int port, portServer2, portEmpleado, portCliente;
 
 	private Resincronizador()
 	{
@@ -49,10 +49,12 @@ public class Resincronizador implements Runnable
 
 		try
 		{
-			properties.load(new FileInputStream(new File("config.cfg")));
+			properties.load(new FileInputStream(new File("config2.cfg")));
 			this.ipServer2 = properties.getProperty("ipServer2", "127.0.0.1");
 			this.port = Integer.parseInt(properties.getProperty("portResincro", "12000"));
 			this.portServer2 = Integer.parseInt(properties.getProperty("portResincroServer2", "13000"));
+			this.portEmpleado = Integer.parseInt(properties.getProperty("portEmpleado2", "19000"));
+			this.portCliente = Integer.parseInt(properties.getProperty("portCliente2", "20000"));
 		} catch (IOException e)
 		{
 			// TODO Auto-generated catch block
@@ -70,6 +72,47 @@ public class Resincronizador implements Runnable
 		return instance;
 	}
 
+	public void actualizarLlamado(int box)
+	{
+		Socket socket;
+		DataOutputStream out;
+
+		try
+		{
+			socket = new Socket(this.ipServer2, this.portEmpleado);
+
+			out = new DataOutputStream(socket.getOutputStream());
+
+			out.writeBoolean(true);
+			out.write(box);
+
+			socket.close();
+		} catch (IOException e)
+		{
+		}
+	}
+
+	public void actualizarRegistro(String dni)
+	{
+		Socket socket;
+		DataOutputStream out;
+
+		try
+		{
+			socket = new Socket(this.ipServer2, this.portCliente);
+
+			out = new DataOutputStream(socket.getOutputStream());
+
+			out.writeBoolean(true);
+			out.writeUTF(dni);
+
+			socket.close();
+
+		} catch (IOException e)
+		{
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public void sincronizar()
 	{
@@ -79,12 +122,11 @@ public class Resincronizador implements Runnable
 		boolean check = false;
 		int i = 0;
 
-		while (i < 5 && !check) // reintenta hasta 5 veces sincronizar con el otro servidor
+		while (i < 3 && !check) // reintenta hasta 3 veces sincronizar con el otro servidor
 		{
 			i++;
 			try
 			{
-				System.out.println("" + ipServer2 + " " + portServer2);
 				socket = new Socket(ipServer2, portServer2);
 				in = new ObjectInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
@@ -97,10 +139,8 @@ public class Resincronizador implements Runnable
 
 			} catch (IOException e)
 			{
-				System.out.println("excepcion");
 			} catch (ClassNotFoundException e)
 			{
-				System.out.println("excepcion2");
 			}
 		}
 

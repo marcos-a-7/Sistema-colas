@@ -5,6 +5,10 @@ import java.util.Queue;
 
 import comunicacion.Notificador;
 
+/**
+ * @author marco
+ *
+ */
 public class AsignadorTurnos
 {
 	private static AsignadorTurnos instance = null;
@@ -71,5 +75,16 @@ public class AsignadorTurnos
 			notificador.notificar(dniSig, box);
 		}
 		return dniSig;
+	}
+
+	/**
+	 * elimina el siguiente de la cola
+	 */
+	public synchronized void eliminarSiguiente()
+	{
+		if (!this.cola.isEmpty())
+		{
+			cola.poll();
+		}
 	}
 }
