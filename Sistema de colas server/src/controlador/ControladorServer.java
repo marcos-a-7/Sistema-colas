@@ -17,6 +17,7 @@ import java.util.Properties;
 import comunicacion.Notificador;
 import comunicacion.ReceptorDniNuevo;
 import comunicacion.ReceptorLlamadas;
+import comunicacion.Resincronizador;
 import vista.Interfaz_Servidor;
 import vista.Interfaz_ServidorCorriendo;
 
@@ -71,7 +72,7 @@ public class ControladorServer implements ActionListener
 		Properties properties = new Properties();
 		try
 		{
-			properties.load(new FileInputStream(new File("config.cfg")));
+			properties.load(new FileInputStream(new File("config2.cfg")));
 			String ipTele = properties.getProperty("ipTele", "127.0.0.1");
 			int puertoTele = Integer.parseInt(properties.getProperty("portTele", "8000"));
 			int puertoBox = Integer.parseInt(properties.getProperty("portEmpleado", "9000"));
@@ -84,6 +85,11 @@ public class ControladorServer implements ActionListener
 
 			Thread receptorLlamadas = new Thread(ReceptorLlamadas.getInstance());
 			Thread receptorDni = new Thread(ReceptorDniNuevo.getInstance());
+			Thread resincronizador = new Thread(Resincronizador.getInstance());
+
+			Resincronizador.getInstance().sincronizar();
+
+			resincronizador.start();
 			receptorLlamadas.start();
 			receptorDni.start();
 

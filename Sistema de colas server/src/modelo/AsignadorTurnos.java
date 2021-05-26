@@ -5,12 +5,15 @@ import java.util.Queue;
 
 import comunicacion.Notificador;
 
+/**
+ * @author marco
+ *
+ */
 public class AsignadorTurnos
 {
 	private static AsignadorTurnos instance = null;
 	Queue<String> cola = new LinkedList<String>();
-	{
-	};
+
 	Notificador notificador;
 
 	private AsignadorTurnos()
@@ -28,7 +31,7 @@ public class AsignadorTurnos
 		return instance;
 	}
 
-	public boolean asignarTurno(String dni)
+	public synchronized boolean asignarTurno(String dni)
 	{
 		boolean salida = false;
 		cola.add(dni);
@@ -37,9 +40,25 @@ public class AsignadorTurnos
 	}
 
 	/**
+	 * @return the cola
+	 */
+	public synchronized Queue<String> getCola()
+	{
+		return cola;
+	}
+
+	/**
+	 * @param cola the cola to set
+	 */
+	public synchronized void setCola(Queue<String> cola)
+	{
+		this.cola = cola;
+	}
+
+	/**
 	 * @return la cantidad de personas en la cola
 	 */
-	public int getCantCola()
+	public synchronized int getCantCola()
 	{
 		return cola.size();
 	}
@@ -47,7 +66,7 @@ public class AsignadorTurnos
 	/**
 	 * @return el siguiente elemento en la cola o null si esta vacia
 	 */
-	public String llamarSiguiente(int box)
+	public synchronized String llamarSiguiente(int box)
 	{
 		String dniSig = "";
 		if (!this.cola.isEmpty())
@@ -56,5 +75,16 @@ public class AsignadorTurnos
 			notificador.notificar(dniSig, box);
 		}
 		return dniSig;
+	}
+
+	/**
+	 * elimina el siguiente de la cola
+	 */
+	public synchronized void eliminarSiguiente()
+	{
+		if (!this.cola.isEmpty())
+		{
+			cola.poll();
+		}
 	}
 }

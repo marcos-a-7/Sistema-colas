@@ -2,6 +2,7 @@ package controlador;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import comunicacion.EmisorDni;
 import vista.Vista_registro;
@@ -78,15 +79,24 @@ public class ControladorRegistro implements ActionListener
 			this.ventana.imprimeMensaje("Debe Ingresar un DNI");
 		} else
 		{
-			boolean check = this.comunicador.enviarCliente(dni);
-			this.ventana.vaciarNumDni();
-			if (check)
+			boolean check;
+			try
 			{
-				this.ventana.imprimeMensaje("Turno solicitado correctamente, espere a ser llamado por el televisor");
-			} else
+				check = this.comunicador.enviarCliente(dni);
+				this.ventana.vaciarNumDni();
+				if (check)
+				{
+					this.ventana
+							.imprimeMensaje("Turno solicitado correctamente, espere a ser llamado por el televisor");
+				} else
+				{
+					this.ventana.imprimeMensaje("No se pudo asignar el turno, intente nuevamente");
+				}
+			} catch (IOException e)
 			{
 				this.ventana.imprimeMensaje("No se pudo asignar el turno, intente nuevamente");
 			}
+
 		}
 
 	}

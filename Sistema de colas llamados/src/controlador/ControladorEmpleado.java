@@ -51,7 +51,7 @@ public class ControladorEmpleado implements ActionListener
 			}
 		} catch (IOException e)
 		{
-			this.ventana.imprimeMensaje("Servidor no disponible intente nuevamente mas tarde");
+			this.ventana.imprimeMensaje("Imposible conectar con el servidor, intente nuevamente mas tarde");
 		}
 
 	}

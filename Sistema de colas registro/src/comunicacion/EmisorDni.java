@@ -14,8 +14,8 @@ import java.util.Properties;
 public class EmisorDni
 {
 	private static EmisorDni instance = null;
-	private int port;
-	private String host;
+	private int[] port = new int[2];
+	private String[] host = new String[2];
 
 	private EmisorDni()
 	{
@@ -29,8 +29,10 @@ public class EmisorDni
 		try
 		{
 			properties.load(new FileInputStream(new File("config.cfg")));
-			this.host = properties.getProperty("ipServer", "127.0.0.1");
-			this.port = Integer.parseInt(properties.getProperty("portCliente", "10000"));
+			this.host[0] = properties.getProperty("ipServer", "127.0.0.1");
+			this.port[0] = Integer.parseInt(properties.getProperty("portCliente", "10000"));
+			this.host[1] = properties.getProperty("ipServer2", "127.0.0.1");
+			this.port[1] = Integer.parseInt(properties.getProperty("portCliente2", "10000"));
 
 		} catch (UnsupportedEncodingException | FileNotFoundException e)
 		{
@@ -51,63 +53,50 @@ public class EmisorDni
 		return instance;
 	}
 
-	/**
-	 * @return the port
-	 */
-	public int getPort()
+	private void switchServer()
 	{
-		return port;
+		String hostAux = this.host[0];
+		int portAux = this.port[0];
+		this.port[0] = this.port[1];
+		this.host[0] = this.host[1];
+		this.port[1] = portAux;
+		this.host[1] = hostAux;
 	}
 
-	/**
-	 * @param port the port to set
-	 */
-	public void setPort(int port)
-	{
-		this.port = port;
-	}
-
-	/**
-	 * @return the host
-	 */
-	public String getHost()
-	{
-		return host;
-	}
-
-	/**
-	 * @param host the host to set
-	 */
-	public void setHost(String host)
-	{
-		this.host = host;
-	}
-
-	public boolean enviarCliente(String dni)
+	private boolean enviar(String dni) throws IOException
 	{
 		boolean salida = false;
-
 		Socket socket;
 		DataInputStream in;
 		DataOutputStream out;
 
+		socket = new Socket(host[0], port[0]);
+
+		in = new DataInputStream(socket.getInputStream());
+		out = new DataOutputStream(socket.getOutputStream());
+
+		out.writeBoolean(false);
+		out.writeUTF(dni);
+
+		salida = in.readBoolean();
+
+		socket.close();
+		return salida;
+	}
+
+	public boolean enviarCliente(String dni) throws IOException
+	{
+		boolean salida = false;
 		try
 		{
-			socket = new Socket(host, port);
-
-			in = new DataInputStream(socket.getInputStream());
-			out = new DataOutputStream(socket.getOutputStream());
-
-			out.writeUTF(dni);
-
-			salida = in.readBoolean();
-
-			socket.close();
+			salida = enviar(dni);
 
 		} catch (IOException e)
 		{
-			e.printStackTrace();// conexion al servidor secundario
+			switchServer();
+			salida = enviar(dni);
 		}
+
 		return salida;
 	}
 

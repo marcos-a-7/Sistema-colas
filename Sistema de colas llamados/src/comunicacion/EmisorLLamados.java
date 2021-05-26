@@ -1,6 +1,5 @@
 package comunicacion;
 
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -15,8 +14,8 @@ import java.util.Properties;
 public class EmisorLLamados
 {
 	private static EmisorLLamados instance = null;
-	private int port;
-	private String host;
+	private int[] port = new int[2];
+	private String[] host = new String[2];
 
 	private EmisorLLamados()
 	{
@@ -30,16 +29,16 @@ public class EmisorLLamados
 		try
 		{
 			properties.load(new FileInputStream(new File("config.cfg")));
-			this.host = properties.getProperty("ipServer", "127.0.0.1");
-			this.port = Integer.parseInt(properties.getProperty("portEmpleado", "9000"));
+			this.host[0] = properties.getProperty("ipServer", "127.0.0.1");
+			this.port[0] = Integer.parseInt(properties.getProperty("portEmpleado", "9000"));
+			this.host[1] = properties.getProperty("ipServer2", "127.0.0.1");
+			this.port[1] = Integer.parseInt(properties.getProperty("portEmpleado2", "9000"));
 
 		} catch (UnsupportedEncodingException | FileNotFoundException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -54,58 +53,51 @@ public class EmisorLLamados
 		return instance;
 	}
 
-	/**
-	 * @return the port
-	 */
-	public int getPort()
+	private void switchServer()
 	{
-		return port;
+		String hostAux = this.host[0];
+		int portAux = this.port[0];
+		this.port[0] = this.port[1];
+		this.host[0] = this.host[1];
+		this.port[1] = portAux;
+		this.host[1] = hostAux;
 	}
 
-	/**
-	 * @param port the port to set
-	 */
-	public void setPort(int port)
+	private Mensaje llamar(int box) throws IOException
 	{
-		this.port = port;
-	}
+		Socket socket;
+		DataInputStream in;
+		DataOutputStream out;
 
-	/**
-	 * @return the host
-	 */
-	public String getHost()
-	{
-		return host;
-	}
+		socket = new Socket(host[0], port[0]);
 
-	/**
-	 * @param host the host to set
-	 */
-	public void setHost(String host)
-	{
-		this.host = host;
+		in = new DataInputStream(socket.getInputStream());
+		out = new DataOutputStream(socket.getOutputStream());
+
+		out.writeBoolean(false);
+		out.write(box);
+
+		String dni = in.readUTF();
+		int cantCola = in.read();
+
+		socket.close();
+
+		return new Mensaje(dni, cantCola);
+
 	}
 
 	public Mensaje enviarLlamado(int box) throws IOException
 	{
 		Mensaje salida = null;
 
-		Socket socket;
-		DataInputStream in;
-		DataOutputStream out;
-
-		socket = new Socket(host, port);
-
-		in = new DataInputStream(socket.getInputStream());
-		out = new DataOutputStream(socket.getOutputStream());
-
-		out.write(box);
-
-		String dni = in.readUTF();
-		int cantCola = in.read();
-
-		salida = new Mensaje(dni, cantCola);
-		socket.close();
+		try
+		{
+			salida = llamar(box);
+		} catch (IOException e)
+		{
+			switchServer();
+			salida = llamar(box);
+		}
 
 		return salida;
 	}
