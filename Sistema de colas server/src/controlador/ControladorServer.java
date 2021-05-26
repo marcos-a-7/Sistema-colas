@@ -18,6 +18,7 @@ import comunicacion.Notificador;
 import comunicacion.ReceptorDniNuevo;
 import comunicacion.ReceptorLlamadas;
 import comunicacion.Resincronizador;
+import monitor.Heartbeat;
 import vista.Interfaz_Servidor;
 import vista.Interfaz_ServidorCorriendo;
 
@@ -72,7 +73,7 @@ public class ControladorServer implements ActionListener
 		Properties properties = new Properties();
 		try
 		{
-			properties.load(new FileInputStream(new File("config2.cfg")));
+			properties.load(new FileInputStream(new File("config.cfg")));
 			String ipTele = properties.getProperty("ipTele", "127.0.0.1");
 			int puertoTele = Integer.parseInt(properties.getProperty("portTele", "8000"));
 			int puertoBox = Integer.parseInt(properties.getProperty("portEmpleado", "9000"));
@@ -96,6 +97,7 @@ public class ControladorServer implements ActionListener
 			this.ventanaCfg.ocultarVentana();
 			this.ventana = new Interfaz_ServidorCorriendo();
 			this.ventana.setActionListener(this);
+			new Thread(Heartbeat.getInstance()).start();
 
 		} catch (UnsupportedEncodingException e)
 		{

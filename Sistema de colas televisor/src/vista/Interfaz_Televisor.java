@@ -27,7 +27,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.LineBorder;
 import javax.swing.JOptionPane;
 
-public class Interfaz_monitor extends JFrame
+public class Interfaz_Televisor extends JFrame
 {
 
 	private JFrame frame;
@@ -67,7 +67,7 @@ public class Interfaz_monitor extends JFrame
 	/**
 	 * Create the frame.
 	 */
-	public Interfaz_monitor()
+	public Interfaz_Televisor()
 	{
 		this.frame = new JFrame("Televisor");
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

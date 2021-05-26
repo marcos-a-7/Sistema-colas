@@ -49,7 +49,7 @@ public class Resincronizador implements Runnable
 
 		try
 		{
-			properties.load(new FileInputStream(new File("config2.cfg")));
+			properties.load(new FileInputStream(new File("config.cfg")));
 			this.ipServer2 = properties.getProperty("ipServer2", "127.0.0.1");
 			this.port = Integer.parseInt(properties.getProperty("portResincro", "12000"));
 			this.portServer2 = Integer.parseInt(properties.getProperty("portResincroServer2", "13000"));

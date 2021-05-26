@@ -10,45 +10,19 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Properties;
 
-import vista.Interfaz_Televisor;
+import monitor.Monitor;
 
-public class ReceptorNotificaciones implements Runnable
+public class HeartbeatReciver implements Runnable
 {
-	private static ReceptorNotificaciones instance = null;
-	private Interfaz_Televisor ventana;
+	private Monitor monitor;
+	private static HeartbeatReciver instance = null;
 	private int port;
 
-	private ReceptorNotificaciones()
+	private HeartbeatReciver()
 	{
 		super();
+		monitor = Monitor.getInstance();
 		leerConfig();
-		this.ventana = new Interfaz_Televisor();
-		this.ventana.vaciarTurnos();
-	}
-
-	/**
-	 * @return the port
-	 */
-	public int getPort()
-	{
-		return port;
-	}
-
-	/**
-	 * @param port the port to set
-	 */
-	public void setPort(int port)
-	{
-		this.port = port;
-	}
-
-	public static ReceptorNotificaciones getInstance()
-	{
-		if (instance == null)
-		{
-			instance = new ReceptorNotificaciones();
-		}
-		return instance;
 	}
 
 	private void leerConfig()
@@ -57,7 +31,7 @@ public class ReceptorNotificaciones implements Runnable
 		try
 		{
 			properties.load(new FileInputStream(new File("config.cfg")));
-			this.port = Integer.parseInt(properties.getProperty("portTele", "8000"));
+			this.port = Integer.parseInt(properties.getProperty("portMonitor", "15000"));
 
 		} catch (UnsupportedEncodingException | FileNotFoundException e)
 		{
@@ -69,7 +43,16 @@ public class ReceptorNotificaciones implements Runnable
 
 	}
 
-	private void recibirNotificacion()
+	public static HeartbeatReciver getInstance()
+	{
+		if (instance == null)
+		{
+			instance = new HeartbeatReciver();
+		}
+		return instance;
+	}
+
+	private void recibir()
 	{
 		ServerSocket server = null;
 		Socket socket = null;
@@ -84,12 +67,9 @@ public class ReceptorNotificaciones implements Runnable
 
 				in = new DataInputStream(socket.getInputStream());
 
-				String dni = in.readUTF();
-				int box = in.read();
+				String id = in.readUTF();
+				actualizarEstado(id);
 
-				this.ventana.actualizaTurnos(dni, box);
-
-				socket.close();
 			}
 		} catch (IOException e)
 		{
@@ -109,11 +89,30 @@ public class ReceptorNotificaciones implements Runnable
 		}
 	}
 
-	@Override
-	public void run()
+	private void actualizarEstado(String id)
 	{
-		recibirNotificacion();
+		switch (id)
+		{
+		case "server1":
+			monitor.setServer1(true);
+			break;
+		case "server2":
+			monitor.setServer2(true);
+			break;
+		case "registro":
+			monitor.setRegistro(true);
+			break;
+		case "televisor":
+			monitor.setTelevisor(true);
+			break;
+		}
 
 	}
 
+	@Override
+	public void run()
+	{
+		recibir();
+
+	}
 }
