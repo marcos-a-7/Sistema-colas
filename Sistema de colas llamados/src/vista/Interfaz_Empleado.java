@@ -31,6 +31,9 @@ public class Interfaz_Empleado extends JFrame
 	private JPanel panel_1;
 	private JPanel panel_2;
 	private JLabel lblCantidadDeClientes_1;
+	private JLabel lblNombre;
+	private JLabel lblApellido;
+	private JLabel lblCategoria;
 
 	/**
 	 * Create the frame.
@@ -57,21 +60,51 @@ public class Interfaz_Empleado extends JFrame
 
 		this.lblNewLabel = new JLabel("Datos del cliente");
 		this.lblNewLabel.setFont(new Font("Arial Black", Font.PLAIN, 26));
+		
+		this.lblNombre = new JLabel("Nombre:  ");
+		this.lblNombre.setFont(new Font("Arial Black", Font.PLAIN, 26));
+		
+		this.lblApellido = new JLabel("Apellido:  ");
+		this.lblApellido.setFont(new Font("Arial Black", Font.PLAIN, 26));
+		
+		this.lblCategoria = new JLabel("Categoria:  ");
+		this.lblCategoria.setFont(new Font("Arial Black", Font.PLAIN, 26));
 		GroupLayout gl_panel_1 = new GroupLayout(this.panel_1);
-		gl_panel_1.setHorizontalGroup(gl_panel_1.createParallelGroup(Alignment.LEADING).addGroup(Alignment.TRAILING,
-				gl_panel_1.createSequentialGroup().addContainerGap(270, Short.MAX_VALUE)
-						.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_panel_1.createSequentialGroup().addGap(10).addComponent(this.lblDni,
-										GroupLayout.PREFERRED_SIZE, 224, GroupLayout.PREFERRED_SIZE))
-								.addComponent(this.lblNewLabel, GroupLayout.PREFERRED_SIZE, 253,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(251)));
-		gl_panel_1.setVerticalGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_1.createSequentialGroup().addGap(39)
-						.addComponent(this.lblNewLabel, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(this.lblDni, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(72, Short.MAX_VALUE)));
+		gl_panel_1.setHorizontalGroup(
+			gl_panel_1.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+						.addComponent(this.lblApellido, GroupLayout.PREFERRED_SIZE, 224, GroupLayout.PREFERRED_SIZE)
+						.addComponent(this.lblNombre, GroupLayout.PREFERRED_SIZE, 224, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+					.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+						.addGroup(Alignment.TRAILING, gl_panel_1.createSequentialGroup()
+							.addComponent(this.lblNewLabel, GroupLayout.PREFERRED_SIZE, 253, GroupLayout.PREFERRED_SIZE)
+							.addGap(249))
+						.addGroup(Alignment.TRAILING, gl_panel_1.createSequentialGroup()
+							.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+								.addComponent(this.lblCategoria, GroupLayout.PREFERRED_SIZE, 224, GroupLayout.PREFERRED_SIZE)
+								.addComponent(this.lblDni, GroupLayout.PREFERRED_SIZE, 224, GroupLayout.PREFERRED_SIZE))
+							.addGap(114))))
+		);
+		gl_panel_1.setVerticalGroup(
+			gl_panel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_1.createSequentialGroup()
+							.addComponent(this.lblNewLabel, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(this.lblDni, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(this.lblCategoria, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel_1.createSequentialGroup()
+							.addGap(81)
+							.addComponent(this.lblNombre, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(this.lblApellido, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(28, Short.MAX_VALUE))
+		);
 		this.panel_1.setLayout(gl_panel_1);
 
 		this.panel_2 = new JPanel();
@@ -112,6 +145,21 @@ public class Interfaz_Empleado extends JFrame
 	public void setDni(String dni)
 	{
 		this.lblDni.setText("DNI: " + dni);
+	}
+	
+	public void setNombre(String nombre)
+	{
+		this.lblDni.setText("Nombre: " + nombre);
+	}
+	
+	public void setApellido(String apellido)
+	{
+		this.lblDni.setText("Apellido: " + apellido);
+	}
+	
+	public void setCategoria(int categoria)
+	{
+		this.lblDni.setText("Categoria: " + categoria);
 	}
 
 	public void setCantidadClientes(int cant)

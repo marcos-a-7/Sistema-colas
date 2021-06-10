@@ -64,7 +64,7 @@ public class Notificador
 	 * @param box numero de box del empleado que llama a la persona
 	 * @return true si pudo realizar la accion con exito, false de lo contrario
 	 */
-	public void notificar(String dni, int box)
+	public void notificar(String identificador, int box)
 	{
 
 		Socket socket;
@@ -76,7 +76,7 @@ public class Notificador
 
 			out = new DataOutputStream(socket.getOutputStream());
 
-			out.writeUTF(dni);
+			out.writeUTF(identificador);
 			out.write(box);
 
 			socket.close();

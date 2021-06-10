@@ -6,10 +6,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
+import java.io.ObjectInputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.util.Properties;
+
+import cliente.Cliente;
 
 public class EmisorLLamados
 {
@@ -67,22 +69,33 @@ public class EmisorLLamados
 	{
 		Socket socket;
 		DataInputStream in;
+		ObjectInputStream inObject;
 		DataOutputStream out;
+		Cliente cliente;
+		Mensaje mensaje = null;
 
 		socket = new Socket(host[0], port[0]);
 
 		in = new DataInputStream(socket.getInputStream());
+		inObject = new ObjectInputStream(socket.getInputStream());
 		out = new DataOutputStream(socket.getOutputStream());
 
 		out.writeBoolean(false);
 		out.write(box);
 
-		String dni = in.readUTF();
-		int cantCola = in.read();
+		try
+		{
+			cliente = (Cliente) inObject.readObject();
+			int cantCola = in.read();
+			mensaje = new Mensaje(cliente, cantCola);// cambiar con cliente luego
+		} catch (ClassNotFoundException | IOException e)
+		{
+			e.printStackTrace();
+		}
 
 		socket.close();
 
-		return new Mensaje(dni, cantCola);
+		return mensaje;
 
 	}
 

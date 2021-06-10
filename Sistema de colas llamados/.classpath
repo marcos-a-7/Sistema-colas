@@ -2,5 +2,6 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="D:/4to 1er cuatri/Analisis y diseño 2/Sistema de colas/Sistema-colas/Sistema de colas llamados/Cliente.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -3,9 +3,11 @@ package comunicacion;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import cliente.Cliente;
 import modelo.AsignadorTurnos;
 
 public class ReceptorLlamadas implements Runnable
@@ -52,6 +54,7 @@ public class ReceptorLlamadas implements Runnable
 		Socket socket = null;
 		DataInputStream in;
 		DataOutputStream out;
+		ObjectOutputStream outObject;
 		boolean isServer;
 
 		try
@@ -63,14 +66,15 @@ public class ReceptorLlamadas implements Runnable
 
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
+				outObject = new ObjectOutputStream(socket.getOutputStream());
 				isServer = in.readBoolean();
 
 				if (!isServer)// la conexion no proviene de un servidor
 				{
 					int box = in.read();
-					String dniSig = this.asignadorTurnos.llamarSiguiente(box);// traigo el siguiente del asignador de
+					Cliente clienteSig = this.asignadorTurnos.llamarSiguiente(box);// traigo el siguiente del asignador de
 																				// turnos
-					out.writeUTF(dniSig);// devuelvo el dni del siguiente al sistema de empleado
+					outObject.writeObject(clienteSig);// devuelvo el dni del siguiente al sistema de empleado
 					out.write(this.asignadorTurnos.getCantCola());
 					socket.close();
 					Resincronizador.getInstance().actualizarLlamado(box);

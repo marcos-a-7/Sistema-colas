@@ -40,13 +40,16 @@ public class ControladorEmpleado implements ActionListener
 		try
 		{
 			mensaje = llamador.enviarLlamado(this.box);
-			if (mensaje.getDni().isEmpty())
+			if (mensaje.getCliente() == null)
 			{
 				this.ventana.imprimeMensaje("No hay personas en la cola de espera, llame nuevamente mas tarde");
 				this.ventana.setCantidadClientes(mensaje.getCantCola());
 			} else
 			{
-				this.ventana.setDni(mensaje.getDni());
+				this.ventana.setDni(mensaje.getCliente().getDni());
+				this.ventana.setNombre(mensaje.getCliente().getNombre());
+				this.ventana.setApellido(mensaje.getCliente().getApellido());
+				this.ventana.setCategoria(mensaje.getCliente().getCategoria());
 				this.ventana.setCantidadClientes(mensaje.getCantCola());
 			}
 		} catch (IOException e)

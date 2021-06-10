@@ -1,23 +1,25 @@
 package comunicacion;
 
+import cliente.Cliente;
+
 public class Mensaje
 {
-	private String dni;
+	private Cliente cliente;
 	private int cantCola;
 
-	public Mensaje(String dni, int cantCola)
+	public Mensaje(Cliente cliente, int cantCola)
 	{
 		super();
-		this.dni = dni;
+		this.cliente = cliente;
 		this.cantCola = cantCola;
 	}
 
 	/**
 	 * @return the dni
 	 */
-	public String getDni()
+	public Cliente getCliente()
 	{
-		return dni;
+		return this.cliente;
 	}
 
 	/**
@@ -25,7 +27,7 @@ public class Mensaje
 	 */
 	public int getCantCola()
 	{
-		return cantCola;
+		return this.cantCola;
 	}
 
 }

@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.util.Properties;
 import java.util.Queue;
 
+import cliente.Cliente;
 import modelo.AsignadorTurnos;
 
 public class Resincronizador implements Runnable
@@ -131,7 +132,7 @@ public class Resincronizador implements Runnable
 				in = new ObjectInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
 
-				this.asignadorTurnos.setCola((Queue<String>) in.readObject());
+				this.asignadorTurnos.setCola((Queue<Cliente>) in.readObject());
 				check = true;
 				out.writeBoolean(check);
 
