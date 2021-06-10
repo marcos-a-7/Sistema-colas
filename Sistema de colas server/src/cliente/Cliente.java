@@ -90,4 +90,10 @@ public class Cliente implements Serializable
 		this.categoria = categoria;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "dni=" + dni + ", apellido=" + apellido + ", nombre=" + nombre + ", categoria=" + categoria;
+	}
+
 }

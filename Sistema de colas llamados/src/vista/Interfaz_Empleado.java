@@ -149,17 +149,17 @@ public class Interfaz_Empleado extends JFrame
 	
 	public void setNombre(String nombre)
 	{
-		this.lblDni.setText("Nombre: " + nombre);
+		this.lblNombre.setText("Nombre: " + nombre);
 	}
 	
 	public void setApellido(String apellido)
 	{
-		this.lblDni.setText("Apellido: " + apellido);
+		this.lblApellido.setText("Apellido: " + apellido);
 	}
 	
 	public void setCategoria(int categoria)
 	{
-		this.lblDni.setText("Categoria: " + categoria);
+		this.lblCategoria.setText("Categoria: " + categoria);
 	}
 
 	public void setCantidadClientes(int cant)

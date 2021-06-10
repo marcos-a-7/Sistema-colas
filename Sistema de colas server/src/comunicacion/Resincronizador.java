@@ -144,6 +144,10 @@ public class Resincronizador implements Runnable
 			{
 			}
 		}
+		if (!check)
+		{
+			this.asignadorTurnos.cargarCola();
+		}
 
 	}
 

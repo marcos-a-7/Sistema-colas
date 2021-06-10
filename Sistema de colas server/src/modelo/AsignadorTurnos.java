@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
 import java.util.Properties;
@@ -11,6 +12,10 @@ import java.util.Queue;
 
 import cliente.Cliente;
 import comunicacion.Notificador;
+import evento.EventoFactory;
+import persistencia.Persistencia;
+import persistencia.PersistenciaBIN;
+import persistencia.PersistenciaEvento;
 
 /**
  * @author marcos
@@ -21,15 +26,21 @@ public class AsignadorTurnos
 	private static AsignadorTurnos instance = null;
 	Queue<Cliente> cola = new LinkedList<Cliente>();
 	private Repositorio repositorio;
+	private Persistencia persistencia;
+	private Persistencia persistenciaEventos;
+	private String direccionPersistencia;
 
 	Notificador notificador;
 	private LlamarStrategy llamador;
+	private String direccionEventos;
 
 	private AsignadorTurnos()
 	{
 		super();
 		this.notificador = Notificador.getInstance();
 		this.repositorio = new Repositorio("repositorio.bin");
+		persistencia = new PersistenciaBIN();
+		persistenciaEventos = new PersistenciaEvento();
 		leerConfig();
 	}
 
@@ -48,6 +59,8 @@ public class AsignadorTurnos
 		try
 		{
 			properties.load(new FileInputStream(new File("config.cfg")));
+			this.direccionPersistencia = properties.getProperty("dirPersistenciaCola", "cola.bin");
+			this.direccionEventos = properties.getProperty("dirEventos", "eventos.txt");
 			String estrategia = properties.getProperty("criterio", "FIFO");
 			switch (estrategia)
 			{
@@ -77,8 +90,17 @@ public class AsignadorTurnos
 	public synchronized boolean asignarTurno(String dni)
 	{
 		boolean salida = false;
-		cola.add(repositorio.traerCliente(dni));
+		Cliente cliente = repositorio.traerCliente(dni);
+		this.cola.add(cliente);
 		salida = true;
+		persistirCola();
+		try
+		{
+			this.persistenciaEventos.guardar(this.direccionEventos, (Serializable) EventoFactory.crearEvento(cliente));
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 		return salida;
 	}
 
@@ -122,6 +144,15 @@ public class AsignadorTurnos
 			{
 				notificador.notificar(clienteSig.getApellido() + " " + clienteSig.getNombre(), box);
 			}
+			try
+			{
+				this.persistenciaEventos.guardar(this.direccionEventos,
+						(Serializable) EventoFactory.crearEvento(clienteSig, box));
+			} catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+			persistirCola();
 		}
 		return clienteSig;
 	}
@@ -134,6 +165,30 @@ public class AsignadorTurnos
 		if (!this.cola.isEmpty())
 		{
 			this.llamador.eliminarSiguiente(this.cola);
+			persistirCola();
 		}
 	}
+
+	private void persistirCola()
+	{
+		try
+		{
+			this.persistencia.guardar(direccionPersistencia, (Serializable) this.cola);
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	public void cargarCola()
+	{
+		try
+		{
+			this.setCola((Queue<Cliente>) this.persistencia.cargar(direccionPersistencia));
+		} catch (ClassNotFoundException | IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
 }
