@@ -160,16 +160,25 @@ public class AsignadorTurnos
 	/**
 	 * elimina el siguiente de la cola
 	 */
-	public synchronized void eliminarSiguiente()
+	public synchronized void eliminarSiguiente(int box)
 	{
+		Cliente clienteSig = null;
 		if (!this.cola.isEmpty())
 		{
-			this.llamador.eliminarSiguiente(this.cola);
+			clienteSig = this.llamador.llamarSiguiente(this.cola);
+			try
+			{
+				this.persistenciaEventos.guardar(this.direccionEventos,
+						(Serializable) EventoFactory.crearEvento(clienteSig, box));
+			} catch (IOException e)
+			{
+				e.printStackTrace();
+			}
 			persistirCola();
 		}
 	}
 
-	private void persistirCola()
+	public void persistirCola()
 	{
 		try
 		{
