@@ -87,8 +87,8 @@ public class EmisorLLamados
 		{
 			cliente = (Cliente) inObject.readObject();
 			int cantCola = in.read();
-			mensaje = new Mensaje(cliente, cantCola);// cambiar con cliente luego
-		} catch (ClassNotFoundException | IOException e)
+			mensaje = new Mensaje(cliente, cantCola);
+		} catch (ClassNotFoundException e)
 		{
 			e.printStackTrace();
 		}
@@ -106,6 +106,11 @@ public class EmisorLLamados
 		try
 		{
 			salida = llamar(box);
+			if (salida.getCantCola() == -1)
+			{
+				throw new IOException();
+			}
+
 		} catch (IOException e)
 		{
 			switchServer();

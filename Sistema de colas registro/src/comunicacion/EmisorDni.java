@@ -90,6 +90,10 @@ public class EmisorDni
 		try
 		{
 			salida = enviar(dni);
+			if (salida == false)
+			{
+				throw new IOException();
+			}
 
 		} catch (IOException e)
 		{
