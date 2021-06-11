@@ -1,6 +1,5 @@
 package monitor;
 
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,9 +9,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.util.Properties;
 
-import estado.Principal;
-import modelo.AsignadorTurnos;
-
 public class Heartbeat implements Runnable
 {
 	private static Heartbeat instance = null;
@@ -20,12 +16,9 @@ public class Heartbeat implements Runnable
 	private String host;
 	private String id;
 
-	private AsignadorTurnos asignadorTurnos;
-
 	private Heartbeat()
 	{
 		super();
-		asignadorTurnos = AsignadorTurnos.getInstance();
 		leerConfig();
 	}
 
@@ -98,22 +91,17 @@ public class Heartbeat implements Runnable
 
 		Socket socket;
 		DataOutputStream out;
-		DataInputStream in;
+
 		try
 		{
 			socket = new Socket(host, port);
 
 			out = new DataOutputStream(socket.getOutputStream());
-			in = new DataInputStream(socket.getInputStream());
 
 			out.writeUTF(id);
-			boolean principal = in.readBoolean();
 
 			socket.close();
-			if (principal)
-			{
-				asignadorTurnos.setEstado(new Principal());
-			}
+
 		} catch (IOException e)
 		{
 			e.printStackTrace();

@@ -12,8 +12,6 @@ import java.util.Queue;
 
 import cliente.Cliente;
 import comunicacion.Notificador;
-import estado.IEstado;
-import estado.Secundario;
 import evento.EventoFactory;
 import persistencia.Persistencia;
 import persistencia.PersistenciaBIN;
@@ -31,7 +29,6 @@ public class AsignadorTurnos
 	private Persistencia persistencia;
 	private Persistencia persistenciaEventos;
 	private String direccionPersistencia;
-	private IEstado estado;
 
 	Notificador notificador;
 	private LlamarStrategy llamador;
@@ -44,7 +41,6 @@ public class AsignadorTurnos
 		this.repositorio = new Repositorio("repositorio.bin");
 		persistencia = new PersistenciaBIN();
 		persistenciaEventos = new PersistenciaEvento();
-		estado = new Secundario();
 		leerConfig();
 	}
 
@@ -91,23 +87,19 @@ public class AsignadorTurnos
 
 	}
 
-	public synchronized boolean asignarTurno(String dni, boolean isServer)
+	public synchronized boolean asignarTurno(String dni)
 	{
 		boolean salida = false;
-		if (this.estado.puedeAsignarTurno())
+		Cliente cliente = repositorio.traerCliente(dni);
+		this.cola.add(cliente);
+		salida = true;
+		persistirCola();
+		try
 		{
-			Cliente cliente = repositorio.traerCliente(dni);
-			this.cola.add(cliente);
-			salida = true;
-			persistirCola();
-			try
-			{
-				this.persistenciaEventos.guardar(this.direccionEventos,
-						(Serializable) EventoFactory.crearEvento(cliente));
-			} catch (IOException e)
-			{
-				e.printStackTrace();
-			}
+			this.persistenciaEventos.guardar(this.direccionEventos, (Serializable) EventoFactory.crearEvento(cliente));
+		} catch (IOException e)
+		{
+			e.printStackTrace();
 		}
 		return salida;
 	}
@@ -133,13 +125,7 @@ public class AsignadorTurnos
 	 */
 	public synchronized int getCantCola()
 	{
-		if (estado.puedeGetCantCola())
-		{
-			return cola.size();
-		} else
-		{
-			return -1;
-		}
+		return cola.size();
 	}
 
 	/**
@@ -148,7 +134,7 @@ public class AsignadorTurnos
 	public synchronized Cliente llamarSiguiente(int box)
 	{
 		Cliente clienteSig = null;
-		if (!this.cola.isEmpty() && this.estado.puedeLlamarSiguiente())
+		if (!this.cola.isEmpty())
 		{
 			clienteSig = this.llamador.llamarSiguiente(this.cola);
 			if (clienteSig.getCategoria() == 0)
@@ -176,7 +162,7 @@ public class AsignadorTurnos
 	 */
 	public synchronized void eliminarSiguiente()
 	{
-		if (!this.cola.isEmpty() && this.estado.puedeEliminarSiguiente())
+		if (!this.cola.isEmpty())
 		{
 			this.llamador.eliminarSiguiente(this.cola);
 			persistirCola();
@@ -203,14 +189,6 @@ public class AsignadorTurnos
 		{
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * @param estado the estado to set
-	 */
-	public void setEstado(IEstado estado)
-	{
-		this.estado = estado;
 	}
 
 }

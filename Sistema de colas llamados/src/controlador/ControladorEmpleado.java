@@ -40,10 +40,7 @@ public class ControladorEmpleado implements ActionListener
 		try
 		{
 			mensaje = llamador.enviarLlamado(this.box);
-			if (mensaje.getCantCola() == -1)
-			{
-				this.ventana.imprimeMensaje("Imposible conectar con servidor, intente nuevamente");
-			} else if (mensaje.getCantCola() == 0)
+			if (mensaje.getCliente() == null)
 			{
 				this.ventana.imprimeMensaje("No hay personas en la cola de espera, llame nuevamente mas tarde");
 				this.ventana.setCantidadClientes(mensaje.getCantCola());

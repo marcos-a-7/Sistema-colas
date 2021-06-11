@@ -1,7 +1,6 @@
 package comunicacion;
 
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -58,7 +57,6 @@ public class HeartbeatReciver implements Runnable
 		ServerSocket server = null;
 		Socket socket = null;
 		DataInputStream in;
-		DataOutputStream out;
 
 		try
 		{
@@ -68,17 +66,10 @@ public class HeartbeatReciver implements Runnable
 				socket = server.accept();
 
 				in = new DataInputStream(socket.getInputStream());
-				out = new DataOutputStream(socket.getOutputStream());
 
 				String id = in.readUTF();
 				actualizarEstado(id);
-				if (id.equals("server1"))
-				{
-					out.writeBoolean(!monitor.isServer2());
-				} else if (id.equals("server2"))
-				{
-					out.writeBoolean(!monitor.isServer1());
-				}
+
 			}
 		} catch (IOException e)
 		{

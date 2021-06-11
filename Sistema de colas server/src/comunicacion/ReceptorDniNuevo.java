@@ -64,7 +64,7 @@ public class ReceptorDniNuevo implements Runnable
 				isServer = in.readBoolean();
 
 				String dni = in.readUTF();
-				boolean check = asignadorTurnos.asignarTurno(dni, isServer);
+				boolean check = asignadorTurnos.asignarTurno(dni);
 
 				if (!isServer)
 				{
