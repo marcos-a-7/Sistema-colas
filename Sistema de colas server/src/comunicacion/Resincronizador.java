@@ -90,7 +90,6 @@ public class Resincronizador implements Runnable
 			socket.close();
 		} catch (IOException e)
 		{
-			e.printStackTrace();
 		}
 	}
 
@@ -138,7 +137,6 @@ public class Resincronizador implements Runnable
 				out.writeBoolean(check);
 
 				socket.close();
-				this.asignadorTurnos.persistirCola();
 
 			} catch (IOException e)
 			{

@@ -34,7 +34,7 @@ public class EmisorLLamados
 			this.host[0] = properties.getProperty("ipServer", "127.0.0.1");
 			this.port[0] = Integer.parseInt(properties.getProperty("portEmpleado", "9000"));
 			this.host[1] = properties.getProperty("ipServer2", "127.0.0.1");
-			this.port[1] = Integer.parseInt(properties.getProperty("portEmpleado2", "19000"));
+			this.port[1] = Integer.parseInt(properties.getProperty("portEmpleado2", "9000"));
 
 		} catch (UnsupportedEncodingException | FileNotFoundException e)
 		{
@@ -88,7 +88,7 @@ public class EmisorLLamados
 			cliente = (Cliente) inObject.readObject();
 			int cantCola = in.read();
 			mensaje = new Mensaje(cliente, cantCola);// cambiar con cliente luego
-		} catch (ClassNotFoundException e)
+		} catch (ClassNotFoundException | IOException e)
 		{
 			e.printStackTrace();
 		}
