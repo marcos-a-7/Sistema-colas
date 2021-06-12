@@ -65,20 +65,22 @@ public class ReceptorLlamadas implements Runnable
 				socket = server.accept();
 
 				in = new DataInputStream(socket.getInputStream());
-				out = new DataOutputStream(socket.getOutputStream());
-				outObject = new ObjectOutputStream(socket.getOutputStream());
 
 				isServer = in.readBoolean();
-
+				
 
 				if (!isServer)// la conexion no proviene de un servidor
 				{
 					int box = in.read();
+					//in.close();
 					Cliente clienteSig = this.asignadorTurnos.llamarSiguiente(box);// traigo el siguiente del asignador
 																					// de
-																					// turnos
+					outObject = new ObjectOutputStream(socket.getOutputStream()); // turnos
 					outObject.writeObject(clienteSig);// devuelvo el dni del siguiente al sistema de empleado
+					//outObject.close();
+					out = new DataOutputStream(socket.getOutputStream());
 					out.write(this.asignadorTurnos.getCantCola());
+					//out.close();
 					socket.close();
 					Resincronizador.getInstance().actualizarLlamado(box);
 				} else // la conexion proviene de un servidor

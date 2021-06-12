@@ -94,19 +94,23 @@ public class AsignadorTurnos
 	public synchronized boolean asignarTurno(String dni, boolean isServer)
 	{
 		boolean salida = false;
-		if (this.estado.puedeAsignarTurno())
+		if (this.estado.puedeAsignarTurno() || isServer)
 		{
 			Cliente cliente = repositorio.traerCliente(dni);
 			this.cola.add(cliente);
 			salida = true;
 			persistirCola();
-			try
+
+			if (!isServer)
 			{
-				this.persistenciaEventos.guardar(this.direccionEventos,
-						(Serializable) EventoFactory.crearEvento(cliente));
-			} catch (IOException e)
-			{
-				e.printStackTrace();
+				try
+				{
+					this.persistenciaEventos.guardar(this.direccionEventos,
+							(Serializable) EventoFactory.crearEvento(cliente));
+				} catch (IOException e)
+				{
+					e.printStackTrace();
+				}
 			}
 		}
 		return salida;
@@ -176,22 +180,11 @@ public class AsignadorTurnos
 	 */
 	public synchronized void eliminarSiguiente(int box)
 	{
-<<<<<<< HEAD
-		Cliente clienteSig = null;
-		if (!this.cola.isEmpty())
-=======
+
 		if (!this.cola.isEmpty() && this.estado.puedeEliminarSiguiente())
->>>>>>> parent of edcc688 (Revert "agrego estados funcionan mal")
+
 		{
-			clienteSig = this.llamador.llamarSiguiente(this.cola);
-			try
-			{
-				this.persistenciaEventos.guardar(this.direccionEventos,
-						(Serializable) EventoFactory.crearEvento(clienteSig, box));
-			} catch (IOException e)
-			{
-				e.printStackTrace();
-			}
+			this.llamador.eliminarSiguiente(this.cola);
 			persistirCola();
 		}
 	}

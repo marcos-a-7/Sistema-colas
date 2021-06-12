@@ -75,23 +75,25 @@ public class EmisorLLamados
 		Mensaje mensaje = null;
 
 		socket = new Socket(host[0], port[0]);
-
-		in = new DataInputStream(socket.getInputStream());
-		inObject = new ObjectInputStream(socket.getInputStream());
-		out = new DataOutputStream(socket.getOutputStream());
-
-		out.writeBoolean(false);
-		out.write(box);
-
 		try
 		{
+
+			out = new DataOutputStream(socket.getOutputStream());
+
+			out.writeBoolean(false);
+			out.write(box);
+			// out.close();
+
+			inObject = new ObjectInputStream(socket.getInputStream());
 			cliente = (Cliente) inObject.readObject();
+			// inObject.close();
+
+			in = new DataInputStream(socket.getInputStream());
 			int cantCola = in.read();
-<<<<<<< HEAD
-			mensaje = new Mensaje(cliente, cantCola);// cambiar con cliente luego
-=======
+			// in.close();
+
 			mensaje = new Mensaje(cliente, cantCola);
->>>>>>> parent of edcc688 (Revert "agrego estados funcionan mal")
+
 		} catch (ClassNotFoundException e)
 		{
 			e.printStackTrace();
@@ -110,7 +112,8 @@ public class EmisorLLamados
 		try
 		{
 			salida = llamar(box);
-			if (salida.getCantCola() == -1)
+			System.out.println(salida.getCantCola());
+			if (salida.getCantCola() == 255)
 			{
 				throw new IOException();
 			}
@@ -118,7 +121,9 @@ public class EmisorLLamados
 		} catch (IOException e)
 		{
 			switchServer();
+			
 			salida = llamar(box);
+			System.out.println(salida.getCantCola());
 		}
 
 		return salida;

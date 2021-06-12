@@ -20,3 +20,16 @@ Registro fecha=2021/06/11 17:13:56 dni=333, apellido=Alfonsin, nombre=Ricardo, c
 Llamado fecha=2021/06/11 17:14:28 dni=222, apellido=Fernandez, nombre=Alberso, categoria=2 Nro. de box=0 
 Llamado fecha=2021/06/11 17:14:40 dni=111, apellido=Peron, nombre=Juan Domingo, categoria=1 Nro. de box=0 
 Llamado fecha=2021/06/11 17:28:52 dni=333, apellido=, nombre=, categoria=0 Nro. de box=0 
+Registro fecha=2021/06/12 11:53:11 dni=111, apellido=Peron, nombre=Juan Domingo, categoria=1 
+Llamado fecha=2021/06/12 11:56:10 dni=111, apellido=Peron, nombre=Juan Domingo, categoria=1 Nro. de box=0 
+Llamado fecha=2021/06/12 16:24:51 dni=222, apellido=, nombre=, categoria=0 Nro. de box=0 
+Llamado fecha=2021/06/12 16:25:22 dni=333, apellido=, nombre=, categoria=0 Nro. de box=0 
+Registro fecha=2021/06/12 16:27:56 dni=111, apellido=Peron, nombre=Juan Domingo, categoria=1 
+Registro fecha=2021/06/12 16:28:21 dni=222, apellido=Fernandez, nombre=Alberso, categoria=2 
+Llamado fecha=2021/06/12 16:52:23 dni=222, apellido=Fernandez, nombre=Alberso, categoria=2 Nro. de box=0 
+Llamado fecha=2021/06/12 16:54:00 dni=111, apellido=Peron, nombre=Juan Domingo, categoria=1 Nro. de box=0 
+Llamado fecha=2021/06/12 17:05:38 dni=111, apellido=Peron, nombre=Juan Domingo, categoria=1 Nro. de box=0 
+Llamado fecha=2021/06/12 17:28:08 dni=444, apellido=, nombre=, categoria=0 Nro. de box=0 
+Llamado fecha=2021/06/12 17:28:26 dni=111, apellido=, nombre=, categoria=0 Nro. de box=0 
+Llamado fecha=2021/06/12 17:29:17 dni=111, apellido=, nombre=, categoria=0 Nro. de box=0 
+Llamado fecha=2021/06/12 17:29:29 dni=222, apellido=, nombre=, categoria=0 Nro. de box=0 

@@ -73,9 +73,9 @@ public class Resincronizador implements Runnable
 		return instance;
 	}
 
-	public void actualizarLlamado(int box)
+	public synchronized void actualizarLlamado(int box)
 	{
-		Socket socket;
+		Socket socket = null;
 		DataOutputStream out;
 
 		try
@@ -83,18 +83,28 @@ public class Resincronizador implements Runnable
 			socket = new Socket(this.ipServer2, this.portEmpleado);
 
 			out = new DataOutputStream(socket.getOutputStream());
+			out.flush();
 
 			out.writeBoolean(true);
 			out.write(box);
 
-			socket.close();
 		} catch (IOException e)
 		{
 			e.printStackTrace();
 		}
+		if (socket != null)
+		{
+			try
+			{
+				socket.close();
+			} catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 
-	public void actualizarRegistro(String dni)
+	public synchronized void actualizarRegistro(String dni)
 	{
 		Socket socket;
 		DataOutputStream out;

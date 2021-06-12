@@ -116,7 +116,7 @@ public class Heartbeat implements Runnable
 			try
 			{
 				this.notificar();
-				Thread.sleep(5000);
+				Thread.sleep(2500);
 
 			} catch (InterruptedException e)
 			{

@@ -151,7 +151,7 @@ public class Monitor implements Runnable
 		{
 			try
 			{
-				Thread.sleep(5000);
+				Thread.sleep(2500);
 				actualizarEstados();
 			} catch (InterruptedException e)
 			{
