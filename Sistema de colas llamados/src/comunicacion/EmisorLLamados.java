@@ -87,7 +87,11 @@ public class EmisorLLamados
 		{
 			cliente = (Cliente) inObject.readObject();
 			int cantCola = in.read();
+<<<<<<< HEAD
 			mensaje = new Mensaje(cliente, cantCola);// cambiar con cliente luego
+=======
+			mensaje = new Mensaje(cliente, cantCola);
+>>>>>>> parent of edcc688 (Revert "agrego estados funcionan mal")
 		} catch (ClassNotFoundException e)
 		{
 			e.printStackTrace();
@@ -106,6 +110,11 @@ public class EmisorLLamados
 		try
 		{
 			salida = llamar(box);
+			if (salida.getCantCola() == -1)
+			{
+				throw new IOException();
+			}
+
 		} catch (IOException e)
 		{
 			switchServer();

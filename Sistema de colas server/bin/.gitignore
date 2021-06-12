@@ -4,4 +4,8 @@
 /comunicacion/
 /evento/
 /cliente/
+<<<<<<< HEAD
+=======
+/estado/
+>>>>>>> parent of edcc688 (Revert "agrego estados funcionan mal")
 /monitor/
