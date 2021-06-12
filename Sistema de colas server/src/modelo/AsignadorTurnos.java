@@ -41,7 +41,6 @@ public class AsignadorTurnos
 	{
 		super();
 		this.notificador = Notificador.getInstance();
-		this.repositorio = new Repositorio("repositorio.bin");
 		persistencia = new PersistenciaBIN();
 		persistenciaEventos = new PersistenciaEvento();
 		estado = new Secundario();
@@ -64,6 +63,7 @@ public class AsignadorTurnos
 		{
 			properties.load(new FileInputStream(new File("config.cfg")));
 			this.direccionPersistencia = properties.getProperty("dirPersistenciaCola", "cola.bin");
+			this.repositorio = new Repositorio(properties.getProperty("dirListaClientes", "listaClientes.bin"));
 			this.direccionEventos = properties.getProperty("dirEventos", "eventos.txt");
 			String estrategia = properties.getProperty("criterio", "FIFO");
 			switch (estrategia)

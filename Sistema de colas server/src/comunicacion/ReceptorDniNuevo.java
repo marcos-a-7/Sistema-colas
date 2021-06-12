@@ -64,13 +64,16 @@ public class ReceptorDniNuevo implements Runnable
 				isServer = in.readBoolean();
 
 				String dni = in.readUTF();
-				boolean check = asignadorTurnos.asignarTurno(dni,isServer);
+				boolean check = asignadorTurnos.asignarTurno(dni, isServer);
 
 				if (!isServer)
 				{
 					out.writeBoolean(check);
 					socket.close();
-					Resincronizador.getInstance().actualizarRegistro(dni);
+					if (check)
+					{
+						Resincronizador.getInstance().actualizarRegistro(dni);
+					}
 				} else
 				{
 					socket.close();
