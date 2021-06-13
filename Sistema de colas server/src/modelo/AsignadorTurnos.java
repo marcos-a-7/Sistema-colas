@@ -157,10 +157,10 @@ public class AsignadorTurnos
 			clienteSig = this.llamador.llamarSiguiente(this.cola);
 			if (clienteSig.getCategoria() == 0)
 			{
-				notificador.notificar(clienteSig.getDni(), box);
+				notificador.notificar("DNI: " + clienteSig.getDni(), box);
 			} else
 			{
-				notificador.notificar(clienteSig.getApellido() + " " + clienteSig.getNombre(), box);
+				notificador.notificar(clienteSig.getNombre() + " " + clienteSig.getApellido(), box);
 			}
 			try
 			{

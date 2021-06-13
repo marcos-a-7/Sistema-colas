@@ -124,7 +124,7 @@ public class Interfaz_Televisor extends JFrame
 		this.panel_4.setBackground(Color.LIGHT_GRAY);
 		this.panel_2.add(this.panel_4);
 
-		this.lblNewLabel_5 = new JLabel("DNI");
+		this.lblNewLabel_5 = new JLabel("Nombre/DNI");
 		this.lblNewLabel_5.setFont(new Font("Arial Black", Font.PLAIN, 30));
 
 		this.lblNewLabel_6 = new JLabel("BOX");
@@ -133,22 +133,29 @@ public class Interfaz_Televisor extends JFrame
 		this.lblNewLabel_19 = new JLabel("Turnos anteriores");
 		this.lblNewLabel_19.setFont(new Font("Arial Black", Font.PLAIN, 30));
 		GroupLayout gl_panel_4 = new GroupLayout(this.panel_4);
-		gl_panel_4.setHorizontalGroup(gl_panel_4.createParallelGroup(Alignment.LEADING).addGroup(Alignment.TRAILING,
-				gl_panel_4.createSequentialGroup().addGroup(gl_panel_4.createParallelGroup(Alignment.TRAILING)
-						.addGroup(
-								gl_panel_4.createSequentialGroup().addContainerGap().addComponent(this.lblNewLabel_19))
-						.addGroup(gl_panel_4.createSequentialGroup().addGap(133).addComponent(this.lblNewLabel_5)
-								.addPreferredGap(ComponentPlacement.RELATED, 125, Short.MAX_VALUE)
-								.addComponent(this.lblNewLabel_6, GroupLayout.PREFERRED_SIZE, 84,
-										GroupLayout.PREFERRED_SIZE)))
-						.addGap(97)));
-		gl_panel_4.setVerticalGroup(gl_panel_4.createParallelGroup(Alignment.TRAILING).addGroup(gl_panel_4
-				.createSequentialGroup()
-				.addComponent(this.lblNewLabel_19, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)
-				.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addGroup(gl_panel_4.createParallelGroup(Alignment.BASELINE).addComponent(this.lblNewLabel_5)
+		gl_panel_4.setHorizontalGroup(
+			gl_panel_4.createParallelGroup(Alignment.TRAILING)
+				.addGroup(Alignment.LEADING, gl_panel_4.createSequentialGroup()
+					.addGap(129)
+					.addComponent(this.lblNewLabel_19, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGap(93))
+				.addGroup(Alignment.LEADING, gl_panel_4.createSequentialGroup()
+					.addGap(68)
+					.addComponent(this.lblNewLabel_5)
+					.addPreferredGap(ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
+					.addComponent(this.lblNewLabel_6, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
+					.addGap(103))
+		);
+		gl_panel_4.setVerticalGroup(
+			gl_panel_4.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel_4.createSequentialGroup()
+					.addComponent(this.lblNewLabel_19, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGroup(gl_panel_4.createParallelGroup(Alignment.BASELINE)
+						.addComponent(this.lblNewLabel_5)
 						.addComponent(this.lblNewLabel_6, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE))
-				.addContainerGap()));
+					.addContainerGap())
+		);
 		this.panel_4.setLayout(gl_panel_4);
 
 		this.panel_3 = new JPanel();
